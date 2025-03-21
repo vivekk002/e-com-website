@@ -10,13 +10,19 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { sortByOptions } from "@/config";
 
-import { ArrowUpDown, FilterIcon } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllFilteredProducts } from "@/store/shop/product-slice";
 
 const ShoppingListing = () => {
   const dispatch = useDispatch();
+  const { productList } = useSelector((state) => state.shoppingProducts);
   // fetch list of products
+
+  useEffect(() => {
+    dispatch(fetchAllFilteredProducts());
+  }, [dispatch]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6">
@@ -25,7 +31,9 @@ const ShoppingListing = () => {
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg font-bold mr-2">All Products</h2>
           <div className="flex items-center gap-3">
-            <span className="text-muted-foreground">No. of products</span>
+            <span className="text-muted-foreground">
+              No. of Products: {productList.length}
+            </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
@@ -49,8 +57,16 @@ const ShoppingListing = () => {
             </DropdownMenu>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 p-4">
-          <ShoppingProductTile />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
+          {productList && productList.length > 0 ? (
+            productList.map((productItem) => (
+              <ShoppingProductTile product={productItem} />
+            ))
+          ) : (
+            <div className="flex items-center justify-center h-full">
+              <p>No products found</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

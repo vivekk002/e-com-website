@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardFooter } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { Image } from "lucide-react";
 import { Button } from "../ui/button";
 const ShoppingProductTile = ({ product }) => {
   return (
@@ -15,7 +8,7 @@ const ShoppingProductTile = ({ product }) => {
       <Card className="w-full max-w-sm mx-auto">
         <div>
           <div className="relative">
-            <Image
+            <img
               src={product?.image}
               alt={product?.title}
               className="w-full h-[300px] object-cover rounded-t-lg"
@@ -44,11 +37,11 @@ const ShoppingProductTile = ({ product }) => {
                     : "text-lg font-semibold text-primary"
                 }`}
               >
-                {product?.price}
+                ${product?.price}
               </span>
               {product?.salePrice > 0 ? (
-                <span className="text-lg font-semibold text-primary">
-                  {product?.salePrice}
+                <span className="text-lg font-semibold text-primary text-green-700">
+                  ${product?.salePrice}
                 </span>
               ) : null}
             </div>

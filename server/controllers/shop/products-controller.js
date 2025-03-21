@@ -1,10 +1,10 @@
-import Product from "@/models/Product";
+const product = require("../../models/product");
 
 const getFilteredProducts = async (req, res) => {
   try {
     const { category, brand, priceRange, sortBy, search } = req.query;
 
-    const products = await Product.find({});
+    const products = await product.find({});
     res.status(200).json({
       success: true,
       data: products,
