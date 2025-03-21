@@ -106,7 +106,7 @@ const ShoppingHeader = () => {
           <MenuItems />
         </div>
 
-        <div>
+        <div className="hidden lg:block">
           <HeaderRightContent />
         </div>
       </div>

@@ -183,3 +183,50 @@ export const shoppingViewHeaderMenuItems = [
     path: "/shop/listing",
   },
 ];
+
+export const productFiltersOptions = {
+  Category: [
+    { id: "electronics", label: "Electronics" },
+    { id: "lcothing", label: "Clothing" },
+    { id: "home&kitchen", label: "Home & Kitchen" },
+    { id: "beauty&health", label: "Beauty & Health" },
+    { id: "sports&outdoors", label: "Sports & Outdoors" },
+    { id: "kids", label: "Kids" },
+    { id: "men", label: "Men" },
+    { id: "women", label: "Women" },
+    { id: "shoes", label: "Shoes" },
+  ],
+  Brand: [
+    { id: "Apple", label: "Apple" },
+    { id: "Samsung", label: "Samsung" },
+    { id: "Sony", label: "Sony" },
+    { id: "LG", label: "LG" },
+    { id: "Nike", label: "Nike" },
+    { id: "Adidas", label: "Adidas" },
+    { id: "Puma", label: "Puma" },
+    { id: "Reebok", label: "Reebok" },
+    { id: "Gucci", label: "Gucci" },
+    { id: "Louis Vuitton", label: "Louis Vuitton" },
+    { id: "Zara", label: "Zara" },
+    { id: "H&M", label: "H&M" },
+    { id: "Whirlpool", label: "Whirlpool" },
+    { id: "KitchenAid", label: "KitchenAid" },
+    { id: "Bosch", label: "Bosch" },
+    { id: "GE", label: "GE" },
+    { id: "L'Oréal", label: "L'Oréal" },
+    { id: "Maybelline", label: "Maybelline" },
+    { id: "Dove", label: "Dove" },
+    { id: "Nivea", label: "Nivea" },
+    { id: "Wilson", label: "Wilson" },
+    { id: "Spalding", label: "Spalding" },
+    { id: "Under Armour", label: "Under Armour" },
+    { id: "The North Face", label: "The North Face" },
+  ],
+};
+
+export const sortByOptions = [
+  { id: "price-asc", label: "Price: Low to High" },
+  { id: "price-desc", label: "Price: High to Low" },
+  { id: "name-asc", label: "Name: A to Z" },
+  { id: "name-desc", label: "Name: Z to A" },
+];
