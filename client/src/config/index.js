@@ -65,7 +65,7 @@ export const addProductsFormElements = [
     type: "select",
     options: [
       { id: "electronics", label: "Electronics" },
-      { id: "lcothing", label: "Clothing" },
+      { id: "clothing", label: "Clothing" },
       { id: "home&kitchen", label: "Home & Kitchen" },
       { id: "beauty&health", label: "Beauty & Health" },
       { id: "sports&outdoors", label: "Sports & Outdoors" },
@@ -187,7 +187,7 @@ export const shoppingViewHeaderMenuItems = [
 export const productFiltersOptions = {
   Category: [
     { id: "electronics", label: "Electronics" },
-    { id: "lcothing", label: "Clothing" },
+    { id: "clothing", label: "Clothing" },
     { id: "home&kitchen", label: "Home & Kitchen" },
     { id: "beauty&health", label: "Beauty & Health" },
     { id: "sports&outdoors", label: "Sports & Outdoors" },
