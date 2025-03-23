@@ -40,6 +40,12 @@ const ProductFilter = ({ filters, handleFiter }) => {
                       <Checkbox
                         className="h-4 w-4"
                         onCheckedChange={() => handleFiter(keyItems, option.id)}
+                        checked={
+                          filters &&
+                          Object.keys(filters).length > 0 &&
+                          filters[keyItems] &&
+                          filters[keyItems].indexOf(option.id) > -1
+                        }
                       />
                       {option.label}
                     </Label>

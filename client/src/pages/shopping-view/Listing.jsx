@@ -59,6 +59,11 @@ const ShoppingListing = () => {
   };
 
   useEffect(() => {
+    setSortBy("price-asc");
+    setFilters(JSON.parse(sessionStorage.getItem("filters")) || {});
+  }, []);
+
+  useEffect(() => {
     dispatch(fetchAllFilteredProducts());
   }, [dispatch]);
 
