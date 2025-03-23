@@ -14,13 +14,25 @@ import { ArrowUpDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllFilteredProducts } from "@/store/shop/product-slice";
+import { useSearchParams } from "react-router-dom";
 
 const ShoppingListing = () => {
   const dispatch = useDispatch();
   const { productList } = useSelector((state) => state.shoppingProducts);
   const [sortBy, setSortBy] = useState(null);
   const [filters, setFilters] = useState(null);
-  console.log("filters", filters);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const createSearchParamsHelper = (filterParams) => {
+    const quaryParams = [];
+    for (const [key, values] of Object.entries(filterParams)) {
+      if (Array.isArray(values) && values.length > 0) {
+        const paramsValue = values.join(",");
+        quaryParams.push(`${key} = ${encodeURIComponent(paramsValue)}`);
+      }
+    }
+    return quaryParams.join("&");
+  };
 
   // fetch list of products
 
@@ -64,8 +76,19 @@ const ShoppingListing = () => {
   }, []);
 
   useEffect(() => {
-    dispatch(fetchAllFilteredProducts());
-  }, [dispatch]);
+    if (filters && Object.keys(filters).length > 0) {
+      const createQuaryString = createSearchParamsHelper(filters);
+      setSearchParams(new URLSearchParams(createQuaryString));
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    dispatch(
+      fetchAllFilteredProducts({ filterParams: filters, sortParams: sortBy })
+    );
+  }, [dispatch, filters, sortBy]);
+
+  // console.log("filters", filters);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6">
