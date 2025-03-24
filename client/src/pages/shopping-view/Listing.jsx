@@ -40,26 +40,21 @@ const ShoppingListing = () => {
     setSortBy(value);
   };
 
-  const handleFiter = (getSectionId, getCurrentOption) => {
+  const handleFilter = (getSectionId, getCurrentOption) => {
     let cpyFilters = { ...filters };
-    // Check if the section exists in filters
+
     const sectionExists = cpyFilters[getSectionId];
 
     if (!sectionExists) {
-      // If section doesn't exist, create new section with first option
       cpyFilters = { ...cpyFilters, [getSectionId]: [getCurrentOption] };
     } else {
-      // If section exists, check if option is already in the array
       const optionIndex = cpyFilters[getSectionId].indexOf(getCurrentOption);
 
       if (optionIndex === -1) {
-        // Option not found, add it to section
         cpyFilters[getSectionId].push(getCurrentOption);
       } else {
-        // Option found, remove it from section
         cpyFilters[getSectionId].splice(optionIndex, 1);
 
-        // Remove section if empty
         if (cpyFilters[getSectionId].length === 0) {
           delete cpyFilters[getSectionId];
         }
@@ -92,7 +87,7 @@ const ShoppingListing = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6">
-      <ProductFilter filters={filters} handleFiter={handleFiter} />
+      <ProductFilter filters={filters} handleFilter={handleFilter} />
       <div className="bg-background w-full rounded-sm shadow-sm">
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-lg font-bold mr-2">All Products</h2>

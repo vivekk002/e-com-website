@@ -6,7 +6,7 @@ import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { Checkbox } from "../ui/checkbox";
 
-const ProductFilter = ({ filters, handleFiter }) => {
+const ProductFilter = ({ filters, handleFilter }) => {
   const [expandedSections, setExpandedSections] = useState({});
 
   const toggleSection = (keyItems) => {
@@ -39,7 +39,9 @@ const ProductFilter = ({ filters, handleFiter }) => {
                     >
                       <Checkbox
                         className="h-4 w-4"
-                        onCheckedChange={() => handleFiter(keyItems, option.id)}
+                        onCheckedChange={() =>
+                          handleFilter(keyItems, option.id)
+                        }
                         checked={
                           filters &&
                           Object.keys(filters).length > 0 &&

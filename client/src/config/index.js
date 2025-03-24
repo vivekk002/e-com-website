@@ -185,18 +185,18 @@ export const shoppingViewHeaderMenuItems = [
 ];
 
 export const productFiltersOptions = {
-  Category: [
-    { id: "electronics", label: "Electronics" },
-    { id: "clothing", label: "Clothing" },
-    { id: "home&kitchen", label: "Home & Kitchen" },
-    { id: "beauty&health", label: "Beauty & Health" },
-    { id: "sports&outdoors", label: "Sports & Outdoors" },
-    { id: "kids", label: "Kids" },
-    { id: "men", label: "Men" },
-    { id: "women", label: "Women" },
-    { id: "shoes", label: "Shoes" },
+  category: [
+    { id: "Electronics", label: "Electronics" },
+    { id: "Clothing", label: "Clothing" },
+    { id: "Home & Kitchen", label: "Home & Kitchen" },
+    { id: "Beauty & Health", label: "Beauty & Health" },
+    { id: "Sports & Outdoors", label: "Sports & Outdoors" },
+    { id: "Kids", label: "Kids" },
+    { id: "Men", label: "Men" },
+    { id: "Women", label: "Women" },
+    { id: "Shoes", label: "Shoes" },
   ],
-  Brand: [
+  brand: [
     { id: "Apple", label: "Apple" },
     { id: "Samsung", label: "Samsung" },
     { id: "Sony", label: "Sony" },
