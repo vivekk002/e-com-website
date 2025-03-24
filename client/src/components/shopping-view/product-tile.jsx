@@ -2,11 +2,12 @@ import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
-const ShoppingProductTile = ({ product }) => {
+
+const ShoppingProductTile = ({ product, handleGetProductDetails }) => {
   return (
     <div>
       <Card className="w-full max-w-sm mx-auto">
-        <div>
+        <div onClick={() => handleGetProductDetails(product?._id)}>
           <div className="relative">
             <img
               src={product?.image}

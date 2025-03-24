@@ -13,15 +13,21 @@ import { sortByOptions } from "@/config";
 import { ArrowUpDown } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllFilteredProducts } from "@/store/shop/product-slice";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/product-slice";
 import { useSearchParams } from "react-router-dom";
-
+import ProductDetailDialog from "@/components/shopping-view/product-details";
 const ShoppingListing = () => {
   const dispatch = useDispatch();
-  const { productList } = useSelector((state) => state.shoppingProducts);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shoppingProducts
+  );
   const [sortBy, setSortBy] = useState(null);
   const [filters, setFilters] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [openDeatailsDialog, setOpenDeatailsDialog] = useState(false);
 
   const createSearchParamsHelper = (filterParams) => {
     const quaryParams = [];
@@ -42,19 +48,15 @@ const ShoppingListing = () => {
 
   const handleFilter = (getSectionId, getCurrentOption) => {
     let cpyFilters = { ...filters };
-
     const sectionExists = cpyFilters[getSectionId];
-
     if (!sectionExists) {
       cpyFilters = { ...cpyFilters, [getSectionId]: [getCurrentOption] };
     } else {
       const optionIndex = cpyFilters[getSectionId].indexOf(getCurrentOption);
-
       if (optionIndex === -1) {
         cpyFilters[getSectionId].push(getCurrentOption);
       } else {
         cpyFilters[getSectionId].splice(optionIndex, 1);
-
         if (cpyFilters[getSectionId].length === 0) {
           delete cpyFilters[getSectionId];
         }
@@ -63,6 +65,10 @@ const ShoppingListing = () => {
 
     setFilters(cpyFilters);
     sessionStorage.setItem("filters", JSON.stringify(cpyFilters));
+  };
+
+  const handleGetProductDetails = (getCurrentProductId) => {
+    dispatch(fetchProductDetails(getCurrentProductId));
   };
 
   useEffect(() => {
@@ -83,13 +89,24 @@ const ShoppingListing = () => {
     );
   }, [dispatch, filters, sortBy]);
 
-  // console.log("filters", filters);
+  useEffect(() => {
+    if (productDetails) {
+      setOpenDeatailsDialog(true);
+    }
+  }, [productDetails]);
+
+  // console.log("productDetails", productDetails);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter filters={filters} handleFilter={handleFilter} />
       <div className="bg-background w-full rounded-sm shadow-sm">
         <div className="flex items-center justify-between p-4 border-b">
+          <ProductDetailDialog
+            open={openDeatailsDialog}
+            setOpen={setOpenDeatailsDialog}
+            productDetails={productDetails}
+          />
           <h2 className="text-lg font-bold mr-2">All Products</h2>
           <div className="flex items-center gap-3">
             <span className="text-muted-foreground">
@@ -127,7 +144,10 @@ const ShoppingListing = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
           {productList && productList.length > 0 ? (
             productList.map((productItem) => (
-              <ShoppingProductTile product={productItem} />
+              <ShoppingProductTile
+                product={productItem}
+                handleGetProductDetails={handleGetProductDetails}
+              />
             ))
           ) : (
             <div className="flex items-center justify-center h-full">
