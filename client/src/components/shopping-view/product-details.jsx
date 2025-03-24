@@ -4,15 +4,18 @@ import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { StarIcon } from "lucide-react";
+import { Input } from "../ui/input";
 
 const ProductDetailDialog = ({ open, setOpen, productDetails }) => {
+  console.log(productDetails, "productDetails in dialog");
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
         <div className="relative overflow-hidden rounded-lg">
           <img
             src={productDetails.image}
-            alt={productDetails.name}
+            alt={productDetails.title}
             width={600}
             height={600}
             className="w-full aspect-square object-cover"
@@ -25,20 +28,22 @@ const ProductDetailDialog = ({ open, setOpen, productDetails }) => {
               {productDetails.description}
             </p>
           </div>
-          <div className="flex items-center justify-between">
-            <p
-              className={`text-xl font-bold text-primary ${
-                productDetails.salePrice ? "line-through" : ""
-              }`}
-            >
-              ${productDetails.price}
-            </p>
-            {productDetails.salePrice ? (
-              <p className="text-xl text-green-600 font-bold text-primary">
-                ${productDetails.salePrice}
+          {
+            <div className="flex items-center justify-between">
+              <p
+                className={`text-xl font-bold text-primary ${
+                  productDetails.salePrice ? "line-through" : ""
+                }`}
+              >
+                ${productDetails.price}
               </p>
-            ) : null}
-          </div>
+              {productDetails.salePrice ? (
+                <p className="text-xl text-green-600 font-bold text-primary">
+                  ${productDetails.salePrice}
+                </p>
+              ) : null}
+            </div>
+          }
           <div className="flex items-center gap-2 mt-2">
             <div className="flex items-centergap-0.2">
               <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
@@ -77,6 +82,136 @@ const ProductDetailDialog = ({ open, setOpen, productDetails }) => {
                 </p>
               </div>
             </div>
+            <div className="grid gap-6">
+              <div className="flex gap-4">
+                <Avatar className="w-10 h-10 border">
+                  <AvatarFallback>VK</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-bold">Vivek</p>
+                  <p className="text-sm text-muted-foreground">12/12/2024</p>
+                </div>
+                <div className="flex items-centergap-0.2">
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                </div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  This is a review
+                </p>
+              </div>
+            </div>
+            <div className="grid gap-6">
+              <div className="flex gap-4">
+                <Avatar className="w-10 h-10 border">
+                  <AvatarFallback>VK</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-bold">Vivek</p>
+                  <p className="text-sm text-muted-foreground">12/12/2024</p>
+                </div>
+                <div className="flex items-centergap-0.2">
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                </div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  This is a review
+                </p>
+              </div>
+            </div>
+            <div className="grid gap-6">
+              <div className="flex gap-4">
+                <Avatar className="w-10 h-10 border">
+                  <AvatarFallback>VK</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-bold">Vivek</p>
+                  <p className="text-sm text-muted-foreground">12/12/2024</p>
+                </div>
+                <div className="flex items-centergap-0.2">
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                </div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  This is a review
+                </p>
+              </div>
+            </div>
+            <div className="grid gap-6">
+              <div className="flex gap-4">
+                <Avatar className="w-10 h-10 border">
+                  <AvatarFallback>VK</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-bold">Vivek</p>
+                  <p className="text-sm text-muted-foreground">12/12/2024</p>
+                </div>
+                <div className="flex items-centergap-0.2">
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                </div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  This is a review
+                </p>
+              </div>
+            </div>
+            <div className="grid gap-6">
+              <div className="flex gap-4">
+                <Avatar className="w-10 h-10 border">
+                  <AvatarFallback>VK</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-bold">Vivek</p>
+                  <p className="text-sm text-muted-foreground">12/12/2024</p>
+                </div>
+                <div className="flex items-centergap-0.2">
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                </div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  This is a review
+                </p>
+              </div>
+            </div>
+            <div className="grid gap-6">
+              <div className="flex gap-4">
+                <Avatar className="w-10 h-10 border">
+                  <AvatarFallback>VK</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col gap-1">
+                  <p className="text-sm font-bold">Vivek</p>
+                  <p className="text-sm text-muted-foreground">12/12/2024</p>
+                </div>
+                <div className="flex items-centergap-0.2">
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                  <StarIcon className="w-5 h-5 text-yellow-500 fill-primary" />
+                </div>
+                <p className="text-sm font-medium text-muted-foreground">
+                  This is a review
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-6 flex gap-2">
+            <Input placeholder="Add a review" />
+            <Button>Add</Button>
           </div>
         </div>
       </DialogContent>
