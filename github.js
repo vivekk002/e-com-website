@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 const { execSync } = require("child_process");
-const fs = require("fs");
 const axios = require("axios");
 require("dotenv").config();
 
@@ -29,7 +28,7 @@ function getChangedFiles() {
 
 async function getCommitMessage(changes) {
   try {
-    const apiUrl = `https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generate?key=${GEMINI_API_KEY}`;
+    const apiUrl = `https://generativelanguage.googleapis.com/v1/models/gemini-1.0-pro-latest:generateContent?key=${GEMINI_API_KEY}`;
 
     const response = await axios.post(
       apiUrl,
@@ -47,7 +46,8 @@ async function getCommitMessage(changes) {
       { headers: { "Content-Type": "application/json" } }
     );
 
-    const commitMessage = response.data.candidates?.[0]?.output;
+    const commitMessage =
+      response.data.candidates?.[0]?.content?.parts?.[0]?.text;
     return commitMessage ? commitMessage.replace(/"/g, "'") : "Update code";
   } catch (error) {
     console.error(
@@ -69,9 +69,26 @@ async function commitAndPush() {
   console.log(`📝 Commit Message: "${commitMessage}"`);
 
   try {
+    // Stash changes before pulling to avoid conflicts
+    execSync("git stash --include-untracked", {
+      cwd: GIT_REPO_PATH,
+      stdio: "inherit",
+    });
+
+    // Pull latest changes
+    execSync(`git pull --rebase ${GITHUB_REMOTE} ${BRANCH}`, {
+      cwd: GIT_REPO_PATH,
+      stdio: "inherit",
+    });
+
+    // Restore changes
+    execSync("git stash pop", { cwd: GIT_REPO_PATH, stdio: "inherit" });
+
+    // Commit and push
     execSync("git add .", { cwd: GIT_REPO_PATH });
     execSync(`git commit -m "${commitMessage}"`, { cwd: GIT_REPO_PATH });
     execSync(`git push ${GITHUB_REMOTE} ${BRANCH}`, { cwd: GIT_REPO_PATH });
+
     console.log("🚀 Changes pushed successfully!");
   } catch (error) {
     console.error("❌ Error committing or pushing changes:", error);
