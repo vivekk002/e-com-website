@@ -19,13 +19,15 @@ import {
 } from "@/store/shop/product-slice";
 import { useSearchParams } from "react-router-dom";
 import ProductDetailDialog from "@/components/shopping-view/product-details";
+
 const ShoppingListing = () => {
   const dispatch = useDispatch();
+
   const { productList, productDetails } = useSelector(
     (state) => state.shoppingProducts
   );
   const [sortBy, setSortBy] = useState(null);
-  const [filters, setFilters] = useState(null);
+  const [filters, setFilters] = useState({});
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDeatailsDialog, setOpenDeatailsDialog] = useState(false);
 
@@ -95,8 +97,6 @@ const ShoppingListing = () => {
     }
   }, [productDetails]);
 
-  console.log("productDetails", productDetails);
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6">
       <ProductFilter filters={filters} handleFilter={handleFilter} />
@@ -145,6 +145,7 @@ const ShoppingListing = () => {
           {productList && productList.length > 0 ? (
             productList.map((productItem) => (
               <ShoppingProductTile
+                key={productItem._id || productItem.id}
                 product={productItem}
                 handleGetProductDetails={handleGetProductDetails}
               />

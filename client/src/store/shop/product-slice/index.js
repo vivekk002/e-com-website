@@ -18,6 +18,7 @@ export const fetchAllFilteredProducts = createAsyncThunk(
     const result = await axios.get(
       `http://localhost:5000/api/shop/products/get?${query}`
     );
+
     return result.data;
   }
 );
@@ -32,7 +33,7 @@ export const fetchProductDetails = createAsyncThunk(
 );
 
 const shoppingProductSlice = createSlice({
-  name: "shoppingProduct",
+  name: "shoppingProducts",
   initialState,
   reducers: {},
   extraReducers: (builder) => {

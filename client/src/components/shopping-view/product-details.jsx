@@ -7,7 +7,15 @@ import { StarIcon } from "lucide-react";
 import { Input } from "../ui/input";
 
 const ProductDetailDialog = ({ open, setOpen, productDetails }) => {
-  console.log(productDetails, "productDetails in dialog");
+  if (!productDetails) {
+    return (
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent>
+          <div className="text-center p-6">Loading...</div>
+        </DialogContent>
+      </Dialog>
+    );
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
