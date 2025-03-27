@@ -20,7 +20,7 @@ function getChangedFiles() {
     const changes = execSync("git status --short", { cwd: GIT_REPO_PATH })
       .toString()
       .trim();
-    return changes;
+    return changes || null;
   } catch (error) {
     console.error("❌ Error getting changed files:", error);
     return null;
@@ -29,16 +29,31 @@ function getChangedFiles() {
 
 async function getCommitMessage(changes) {
   try {
+    const apiUrl = `https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generate?key=${GEMINI_API_KEY}`;
+
     const response = await axios.post(
-      "https://api.gemini.com/generate",
+      apiUrl,
       {
-        prompt: `Generate a commit message for the following changes:\n${changes}`,
+        contents: [
+          {
+            parts: [
+              {
+                text: `Generate a concise commit message for the following Git changes:\n${changes}`,
+              },
+            ],
+          },
+        ],
       },
-      { headers: { Authorization: `Bearer ${GEMINI_API_KEY}` } }
+      { headers: { "Content-Type": "application/json" } }
     );
-    return response.data.message || "Update code";
+
+    const commitMessage = response.data.candidates?.[0]?.output;
+    return commitMessage ? commitMessage.replace(/"/g, "'") : "Update code";
   } catch (error) {
-    console.error("❌ Error getting commit message:", error);
+    console.error(
+      "❌ Error getting commit message:",
+      error.response?.data || error.message
+    );
     return "Update code";
   }
 }
@@ -49,11 +64,18 @@ async function commitAndPush() {
     console.log("✅ No changes detected.");
     return;
   }
+
   const commitMessage = await getCommitMessage(changes);
-  execSync("git add .", { cwd: GIT_REPO_PATH });
-  execSync(`git commit -m "${commitMessage}"`, { cwd: GIT_REPO_PATH });
-  execSync(`git push ${GITHUB_REMOTE} ${BRANCH}`, { cwd: GIT_REPO_PATH });
-  console.log("🚀 Changes pushed successfully!");
+  console.log(`📝 Commit Message: "${commitMessage}"`);
+
+  try {
+    execSync("git add .", { cwd: GIT_REPO_PATH });
+    execSync(`git commit -m "${commitMessage}"`, { cwd: GIT_REPO_PATH });
+    execSync(`git push ${GITHUB_REMOTE} ${BRANCH}`, { cwd: GIT_REPO_PATH });
+    console.log("🚀 Changes pushed successfully!");
+  } catch (error) {
+    console.error("❌ Error committing or pushing changes:", error);
+  }
 }
 
 commitAndPush();
