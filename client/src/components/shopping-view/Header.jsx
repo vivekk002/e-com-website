@@ -1,7 +1,7 @@
 import { House, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { shoppingViewHeaderMenuItems } from "@/config";
@@ -15,6 +15,8 @@ import {
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
 import { logOutUser } from "@/store/auth-slice";
+import UserCartWrapper from "./cart-wrapper";
+import UserCartItemsContent from "./cart-items-content";
 
 const MenuItems = () => {
   return (
@@ -34,6 +36,7 @@ const MenuItems = () => {
 
 const HeaderRightContent = () => {
   const { user } = useSelector((state) => state.auth);
+  const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLogout = () => {
@@ -41,10 +44,24 @@ const HeaderRightContent = () => {
   };
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4 mt-3">
-      <Button variant="outline" size="icon">
-        <ShoppingCart className="h-6 w-6" />
-        <span className="sr-only">User Cart</span>
-      </Button>
+      <Sheet
+        open={isCartOpen}
+        onOpenChange={() => {
+          setIsCartOpen(false);
+        }}
+      >
+        <Button
+          onClick={() => {
+            setIsCartOpen(true);
+          }}
+          variant="outline"
+          size="icon"
+        >
+          <ShoppingCart className="h-6 w-6" />
+          <span className="sr-only">User Cart</span>
+        </Button>
+        <UserCartWrapper />
+      </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className=" bg-black cursor-pointer">

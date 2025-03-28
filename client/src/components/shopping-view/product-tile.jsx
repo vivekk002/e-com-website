@@ -3,7 +3,11 @@ import { Card, CardContent, CardFooter } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 
-const ShoppingProductTile = ({ product, handleGetProductDetails }) => {
+const ShoppingProductTile = ({
+  product,
+  handleGetProductDetails,
+  handleAddToCart,
+}) => {
   return (
     <div>
       <Card className="w-full max-w-sm mx-auto">
@@ -47,10 +51,15 @@ const ShoppingProductTile = ({ product, handleGetProductDetails }) => {
               ) : null}
             </div>
           </CardContent>
-          <CardFooter>
-            <Button className="w-full">Add to Cart</Button>
-          </CardFooter>
         </div>
+        <CardFooter>
+          <Button
+            onClick={() => handleAddToCart(product._id)}
+            className="w-full mt-6"
+          >
+            Add to Cart
+          </Button>
+        </CardFooter>
       </Card>
     </div>
   );
