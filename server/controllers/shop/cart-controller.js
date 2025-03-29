@@ -10,6 +10,7 @@ const addToCart = async (req, res) => {
         message: "Invalid Data Provided",
       });
     }
+
     const product = await Product.findById(productId);
     if (!product) {
       return res.status(404).json({
@@ -53,7 +54,7 @@ const addToCart = async (req, res) => {
 
 const fetchCartItems = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const { userId } = req.body;
     if (!userId) {
       return res.status(400).json({
         success: false,
@@ -105,7 +106,7 @@ const fetchCartItems = async (req, res) => {
 
 const updateCartItem = async (req, res) => {
   try {
-    const { userId, productId, quantity } = req.params;
+    const { userId, productId, quantity } = req.body;
 
     if (!userId || !productId || quantity <= 0) {
       return res.status(400).json({
@@ -134,7 +135,7 @@ const updateCartItem = async (req, res) => {
 
     cart.items[findCurrentProductId].quantity = quantity;
     await cart.save();
-    await Cart.populate({
+    await cart.populate({
       path: "items.productId",
       select: "title price image salePrice",
     });
@@ -154,12 +155,6 @@ const updateCartItem = async (req, res) => {
         items: populateCartItems,
       },
     });
-
-    res.status(200).json({
-      success: true,
-      message: "Cart item updated successfully",
-      data: cart,
-    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -171,7 +166,7 @@ const updateCartItem = async (req, res) => {
 
 const deleteCartItem = async (req, res) => {
   try {
-    const { userId, productId } = req.params;
+    const { userId, productId } = req.body;
     if (!userId || !productId) {
       return res.status(400).json({
         success: false,
@@ -197,7 +192,7 @@ const deleteCartItem = async (req, res) => {
 
     await cart.save();
 
-    await Cart.populate({
+    await cart.populate({
       path: "items.productId",
       select: "title price image salePrice",
     });

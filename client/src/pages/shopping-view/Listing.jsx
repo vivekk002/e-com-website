@@ -82,9 +82,7 @@ const ShoppingListing = () => {
         productId: getCurrentProductId,
         quantity: 1,
       })
-    ).then((data) => {
-      console.log("data", data);
-    });
+    ).then((data) => {});
   };
 
   useEffect(() => {
