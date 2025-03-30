@@ -4,7 +4,8 @@ const mongoose = require("mongoose");
 
 const addToCart = async (req, res) => {
   try {
-    const { userId, productId, quantity } = req.body;
+    const { userId, productId } = req.params;
+    const { quantity } = req.body;
     if (
       !mongoose.Types.ObjectId.isValid(userId) ||
       !mongoose.Types.ObjectId.isValid(productId) ||
@@ -112,7 +113,8 @@ const fetchCartItems = async (req, res) => {
 
 const updateCartItem = async (req, res) => {
   try {
-    const { userId, productId, quantity } = req.body;
+    const { userId, productId } = req.params;
+    const { quantity } = req.body;
 
     if (!userId || !productId || quantity <= 0) {
       return res.status(400).json({
@@ -145,6 +147,7 @@ const updateCartItem = async (req, res) => {
       path: "items.productId",
       select: "title price image salePrice",
     });
+
     const populateCartItems = cart.items.map((item) => ({
       productId: item.productId ? item.productId._id : null,
       image: item.productId ? item.productId.image : null,
@@ -153,9 +156,11 @@ const updateCartItem = async (req, res) => {
       salePrice: item.productId ? item.productId.salePrice : null,
       quantity: item.quantity,
     }));
+    console.log(populateCartItems, "populateCartItems");
+
     res.status(200).json({
       success: true,
-      message: "Cart items fetched successfully",
+      message: "Cart items Updated successfully",
       data: {
         ...cart._doc,
         items: populateCartItems,

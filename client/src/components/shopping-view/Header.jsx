@@ -1,7 +1,7 @@
 import { House, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Sheet, SheetContent, SheetHeader, SheetTrigger } from "../ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
 import { shoppingViewHeaderMenuItems } from "@/config";
@@ -44,7 +44,9 @@ const HeaderRightContent = () => {
     dispatch(logOutUser());
   };
   useEffect(() => {
-    dispatch(fetchCartItems(user?.userId));
+    if (user?.userId) {
+      dispatch(fetchCartItems(user.userId));
+    }
   }, [dispatch, user?.userId]);
 
   return (

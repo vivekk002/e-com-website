@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllFilteredProducts,
   fetchProductDetails,
+  setProductDetails,
 } from "@/store/shop/product-slice";
 import { useSearchParams } from "react-router-dom";
 import ProductDetailDialog from "@/components/shopping-view/product-details";

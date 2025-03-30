@@ -7,7 +7,7 @@ const {
 } = require("../../controllers/shop/cart-controller");
 const router = express.Router();
 
-router.post("/add", addToCart);
+router.post("/add/:userId/:productId", addToCart);
 router.get("/get/:userId", fetchCartItems);
 router.put("/update-cart/:userId/:productId", updateCartItem);
 router.delete("/delete/:userId/:productId", deleteCartItem);
