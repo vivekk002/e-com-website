@@ -3,14 +3,22 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import UserCartItemsContent from "./cart-items-content";
 import { Button } from "../ui/button";
 
-const UserCartWrapper = () => {
+const UserCartWrapper = ({ cartItems }) => {
   return (
     <SheetContent className="sm:max-w-md">
       <SheetHeader>
         <SheetTitle>Your Cart</SheetTitle>
       </SheetHeader>
       <div className="mt-8 space-y-4">
-        <UserCartItemsContent />
+        {cartItems && cartItems.length > 0 ? (
+          cartItems.map((item) => (
+            <UserCartItemsContent key={item._id} cartItem={item} />
+          ))
+        ) : (
+          <div className="flex justify-center items-center h-full">
+            <p className="text-gray-500">No items in cart</p>
+          </div>
+        )}
       </div>
       <div className="mt-8 space-y-4">
         <div className="flex justify-between">

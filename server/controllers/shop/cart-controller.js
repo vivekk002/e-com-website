@@ -1,10 +1,15 @@
 const Cart = require("../../models/cart");
 const Product = require("../../models/product");
+const mongoose = require("mongoose");
 
 const addToCart = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
-    if (!userId || !productId || quantity <= 0) {
+    if (
+      !mongoose.Types.ObjectId.isValid(userId) ||
+      !mongoose.Types.ObjectId.isValid(productId) ||
+      quantity <= 0
+    ) {
       return res.status(400).json({
         success: false,
         message: "Invalid Data Provided",
@@ -38,6 +43,7 @@ const addToCart = async (req, res) => {
       cart.items[findCurrentProductId].quantity += quantity;
     }
     await cart.save();
+
     res.status(200).json({
       success: true,
       message: "Product added to cart successfully",
@@ -54,7 +60,7 @@ const addToCart = async (req, res) => {
 
 const fetchCartItems = async (req, res) => {
   try {
-    const { userId } = req.body;
+    const { userId } = req.params;
     if (!userId) {
       return res.status(400).json({
         success: false,
@@ -166,7 +172,7 @@ const updateCartItem = async (req, res) => {
 
 const deleteCartItem = async (req, res) => {
   try {
-    const { userId, productId } = req.body;
+    const { userId, productId } = req.params;
     if (!userId || !productId) {
       return res.status(400).json({
         success: false,
@@ -197,18 +203,23 @@ const deleteCartItem = async (req, res) => {
       select: "title price image salePrice",
     });
 
-    const populateCartItems = cart.items.map((item) => ({
-      productId: item.productId ? item.productId._id : null,
-      image: item.productId ? item.productId.image : null,
-      title: item.productId ? item.productId.title : "Product Not Found",
-      price: item.productId ? item.productId.price : null,
-      salePrice: item.productId ? item.productId.salePrice : null,
-      quantity: item.quantity,
-    }));
+    const populateCartItems = cart.items.map((item) => {
+      return {
+        productId: item.productId ? item.productId._id : null,
+        image: item.productId ? item.productId.image : null,
+        title: item.productId ? item.productId.title : "Product Not Found",
+        price: item.productId ? item.productId.price : null,
+        salePrice: item.productId ? item.productId.salePrice : null,
+        quantity: item.quantity,
+      };
+    });
     res.status(200).json({
       success: true,
       message: "Cart item deleted successfully",
-      data: cart,
+      data: {
+        ...cart._doc,
+        items: populateCartItems,
+      },
     });
   } catch (error) {
     console.log(error);

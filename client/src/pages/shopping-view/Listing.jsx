@@ -19,7 +19,8 @@ import {
 } from "@/store/shop/product-slice";
 import { useSearchParams } from "react-router-dom";
 import ProductDetailDialog from "@/components/shopping-view/product-details";
-import { addToCart } from "@/store/shop/cart-slice";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { useToast } from "@/hooks/use-toast";
 const ShoppingListing = () => {
   const dispatch = useDispatch();
 
@@ -27,7 +28,7 @@ const ShoppingListing = () => {
     (state) => state.shoppingProducts
   );
   const { user } = useSelector((state) => state.auth);
-
+  const { toast } = useToast();
   const [sortBy, setSortBy] = useState(null);
   const [filters, setFilters] = useState({});
   const [searchParams, setSearchParams] = useSearchParams();
@@ -82,7 +83,16 @@ const ShoppingListing = () => {
         productId: getCurrentProductId,
         quantity: 1,
       })
-    ).then((data) => {});
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.userId));
+        toast({
+          title: "Product added to cart",
+          description: "You can view your cart in the cart page",
+          variant: "success",
+        });
+      }
+    });
   };
 
   useEffect(() => {

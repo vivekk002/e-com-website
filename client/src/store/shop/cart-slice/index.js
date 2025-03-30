@@ -6,6 +6,26 @@ const initialState = {
   isLoading: false,
 };
 
+export const fetchCartItems = createAsyncThunk(
+  "cart/fetchCartItems",
+  async (userId) => {
+    try {
+      if (!userId) {
+        return {
+          success: false,
+          message: "User ID is required",
+        };
+      }
+      const response = await axios.get(
+        `http://localhost:5000/api/shop/cart/get/${userId}`
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+);
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ userId, productId, quantity }) => {
@@ -16,16 +36,6 @@ export const addToCart = createAsyncThunk(
         productId,
         quantity,
       }
-    );
-    return response.data;
-  }
-);
-
-export const fetchCartItems = createAsyncThunk(
-  "cart/fetchCartItems",
-  async (userId) => {
-    const response = await axios.get(
-      `http://localhost:5000/api/shop/cart/get/${userId}`
     );
     return response.data;
   }
