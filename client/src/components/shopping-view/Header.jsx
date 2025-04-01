@@ -16,19 +16,36 @@ import {
 } from "../ui/dropdown-menu";
 import { logOutUser } from "@/store/auth-slice";
 import UserCartWrapper from "./cart-wrapper";
-import { fetchCartItems, deleteCartItem } from "@/store/shop/cart-slice";
+import { fetchCartItems } from "@/store/shop/cart-slice";
+import { Label } from "../ui/label";
 
 const MenuItems = () => {
+  const navigate = useNavigate();
+
+  const handleNavigate = (item) => {
+    sessionStorage.removeItem("filters");
+    const currentFilter =
+      item.id !== "home"
+        ? {
+            category: [item.id],
+          }
+        : null;
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(item.path);
+  };
+
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row mt-5">
       {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Link
+        <Label
           key={menuItem.id}
-          to={menuItem.path}
-          className="text-sm font-medium text-gray-900 hover:text-black-900 "
+          className="text-sm font-medium text-gray-900 hover:text-black-900 cursor-pointer "
+          onClick={() => {
+            handleNavigate(menuItem);
+          }}
         >
           {menuItem.label}
-        </Link>
+        </Label>
       ))}
     </nav>
   );
@@ -111,7 +128,7 @@ const ShoppingHeader = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
 
   return (
-    <header className="sticky top-0 z-40 w-screen border-b bg-background ">
+    <header className="sticky top-0 z-40 w-[100vw] border-b bg-background ">
       <div className="flex h-16 item-center justify-between px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-2 text-black">
           <House className="h-6 w-6" />

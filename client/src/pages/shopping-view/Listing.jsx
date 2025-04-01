@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllFilteredProducts,
   fetchProductDetails,
-  setProductDetails,
 } from "@/store/shop/product-slice";
 import { useSearchParams } from "react-router-dom";
 import ProductDetailDialog from "@/components/shopping-view/product-details";
@@ -36,14 +35,14 @@ const ShoppingListing = () => {
   const [openDeatailsDialog, setOpenDeatailsDialog] = useState(false);
 
   const createSearchParamsHelper = (filterParams) => {
-    const quaryParams = [];
+    const queryParams = [];
     for (const [key, values] of Object.entries(filterParams)) {
       if (Array.isArray(values) && values.length > 0) {
         const paramsValue = values.join(",");
-        quaryParams.push(`${key} = ${encodeURIComponent(paramsValue)}`);
+        queryParams.push(`${key} = ${encodeURIComponent(paramsValue)}`);
       }
     }
-    return quaryParams.join("&");
+    return queryParams.join("&");
   };
 
   // fetch list of products

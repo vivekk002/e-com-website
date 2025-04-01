@@ -5,7 +5,8 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth/auth-routes");
 const adminProductRoutes = require("./routes/admin/product-routes");
 const shopProductRoutes = require("./routes/shop/products-routes");
-const cartRoutes = require("./routes/shop/cart-routs");
+const shopCartRoutes = require("./routes/shop/cart-routes");
+const shopAddressRoutes = require("./routes/shop/address-route");
 mongoose
   .connect(
     "mongodb+srv://vivekkumar054:vivek054@cluster0.30grw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
@@ -41,7 +42,8 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/admin/products", adminProductRoutes);
 app.use("/api/shop/products", shopProductRoutes);
-app.use("/api/shop/cart", cartRoutes);
+app.use("/api/shop/cart", shopCartRoutes);
+app.use("/api/shop/address", shopAddressRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
