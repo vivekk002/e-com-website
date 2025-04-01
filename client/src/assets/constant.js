@@ -22,6 +22,7 @@ import wilsonLogo from "./logos/wilson.svg";
 import spaldingLogo from "./logos/spalding.svg";
 import underArmourLogo from "./logos/underarmour.svg";
 import theNorthFaceLogo from "./logos/thenorthface.svg";
+import accountBackground from "./bg/background.jpg";
 
 export {
   appleLogo,
@@ -48,4 +49,5 @@ export {
   spaldingLogo,
   underArmourLogo,
   theNorthFaceLogo,
+  accountBackground,
 };

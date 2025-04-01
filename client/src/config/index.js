@@ -230,3 +230,48 @@ export const sortByOptions = [
   { id: "name-asc", label: "Name: A to Z" },
   { id: "name-desc", label: "Name: Z to A" },
 ];
+
+export const addressFormControls = [
+  {
+    name: "address",
+    Label: "Address",
+    placeholder: "Enter your address",
+    type: "text",
+    componentType: "input",
+  },
+  {
+    name: "city",
+    Label: "City",
+    placeholder: "Enter your city",
+    type: "text",
+    componentType: "input",
+  },
+  {
+    name: "state",
+    Label: "State",
+    placeholder: "Enter your state",
+    type: "text",
+    componentType: "input",
+  },
+  {
+    name: "pincode",
+    Label: "Pincode",
+    placeholder: "Enter your pincode",
+    type: "text",
+    componentType: "input",
+  },
+  {
+    name: "phone",
+    Label: "Phone",
+    placeholder: "Enter your phone number",
+    type: "tel",
+    componentType: "input",
+  },
+  {
+    name: "notes",
+    Label: "Additional Notes",
+    placeholder: "Any additional delivery instructions",
+    type: "text",
+    componentType: "textarea",
+  },
+];
