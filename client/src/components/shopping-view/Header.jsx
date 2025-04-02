@@ -90,6 +90,7 @@ const HeaderRightContent = () => {
               ? cartItems.items
               : []
           }
+          setIsCartOpen={setIsCartOpen}
         />
       </Sheet>
       <DropdownMenu>
