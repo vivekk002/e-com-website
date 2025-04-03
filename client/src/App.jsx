@@ -2,7 +2,7 @@ import AdminLayout from "./components/admin-view/layout";
 import AuthLayout from "./components/auth/layout";
 import AdminDashboard from "./pages/admin-vieew/dashboard";
 import Adminfeatures from "./pages/admin-vieew/features";
-import Adminorders from "./pages/admin-vieew/orders";
+import AdminOrdersPage from "./pages/admin-vieew/orders";
 import Adminproducts from "./pages/admin-vieew/products";
 import AuthLogin from "./pages/auth/login";
 import AuthRegister from "./pages/auth/register";
@@ -57,7 +57,7 @@ function App() {
         >
           <Route path="dashboard" element={<AdminDashboard />} />
           <Route path="products" element={<Adminproducts />} />
-          <Route path="orders" element={<Adminorders />} />
+          <Route path="orders" element={<AdminOrdersPage />} />
           <Route path="features" element={<Adminfeatures />} />
         </Route>
         <Route

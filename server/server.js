@@ -7,6 +7,7 @@ const adminProductRoutes = require("./routes/admin/product-routes");
 const shopProductRoutes = require("./routes/shop/products-routes");
 const shopCartRoutes = require("./routes/shop/cart-routes");
 const shopAddressRoutes = require("./routes/shop/address-route");
+const shopOrderRoutes = require("./routes/shop/order-routes");
 mongoose
   .connect(
     "mongodb+srv://vivekkumar054:vivek054@cluster0.30grw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
@@ -44,6 +45,7 @@ app.use("/api/admin/products", adminProductRoutes);
 app.use("/api/shop/products", shopProductRoutes);
 app.use("/api/shop/cart", shopCartRoutes);
 app.use("/api/shop/address", shopAddressRoutes);
+app.use("/api/shop/order", shopOrderRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

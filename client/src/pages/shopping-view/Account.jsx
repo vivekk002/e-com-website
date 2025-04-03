@@ -1,7 +1,7 @@
 import React from "react";
 import { accountBackground } from "../../assets/constant";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Orders from "@/components/shopping-view/orders";
+import ShoppingOrders from "@/components/shopping-view/orders";
 import Address from "@/components/shopping-view/address";
 const ShoppingAccount = () => {
   return (
@@ -23,7 +23,7 @@ const ShoppingAccount = () => {
             <TabsContent value="orders">
               <div className="flex flex-col gap-4">
                 <h1 className="text-2xl font-bold">
-                  <Orders />
+                  <ShoppingOrders />
                 </h1>
               </div>
             </TabsContent>

@@ -9,14 +9,15 @@ import {
   TableRow,
 } from "../ui/table";
 import { Button } from "../ui/button";
-import { Dialog, DialogContent } from "../ui/dialog";
-import ShoppingOrderDetails from "./order-details";
-const ShoppingOrders = () => {
+import { Dialog } from "../ui/dialog";
+import AdminOrderDetails from "./order-details";
+const AdminOrders = () => {
   const [openDeatailsDialog, setOpenDeatailsDialog] = useState(false);
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Order History</CardTitle>
+        <CardTitle> All Orders </CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
@@ -45,7 +46,7 @@ const ShoppingOrders = () => {
                   <Button onClick={() => setOpenDeatailsDialog(true)}>
                     View Details
                   </Button>
-                  <ShoppingOrderDetails />
+                  <AdminOrderDetails />
                 </Dialog>
               </TableCell>
             </TableRow>
@@ -56,4 +57,4 @@ const ShoppingOrders = () => {
   );
 };
 
-export default ShoppingOrders;
+export default AdminOrders;
