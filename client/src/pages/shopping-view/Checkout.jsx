@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { accountBackground } from "../../assets/constant";
 import Address from "@/components/shopping-view/address";
 import { useSelector } from "react-redux";
 import UserCartItemsContent from "@/components/shopping-view/cart-items-content";
 import { Button } from "@/components/ui/button";
+import { createNewOrder } from "@/store/shop/order-slice";
+import { useDispatch } from "react-redux";
 const ShoppingCheckout = () => {
+  const dispatch = useDispatch();
+
   const { cartItems } = useSelector((state) => state.shoppingCart);
+  const { user } = useSelector((state) => state.auth);
+
+  const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
+  const [isPaymentStarted, setIsPaymentStarted] = useState(false);
 
   const totalCartAmount =
     cartItems?.items?.length > 0
@@ -20,6 +28,45 @@ const ShoppingCheckout = () => {
         )
       : 0;
 
+  const handlePlaceOrder = () => {
+    const orderData = {
+      userId: user.userId,
+      cartItems: cartItems.items.map((item) => ({
+        productId: item?.productId,
+        title: item?.title,
+        image: item?.image,
+        price: item?.salePrice > 0 ? item?.salePrice : item?.price,
+        quantity: item?.quantity,
+      })),
+      address: {
+        addressId: currentSelectedAddress?._id,
+        address: currentSelectedAddress?.address,
+        city: currentSelectedAddress?.city,
+        state: currentSelectedAddress?.state,
+        pincode: currentSelectedAddress?.pincode,
+        phone: currentSelectedAddress?.phone,
+        notes: currentSelectedAddress?.notes,
+      },
+      orderStatus: "pending",
+      paymentMethod: "paypal",
+      paymentStatus: "pending",
+      totalPrice: totalCartAmount,
+      orderDate: new Date(),
+      orderUpdateDate: new Date(),
+      paymentId: "",
+      payerId: "",
+    };
+    dispatch(createNewOrder(orderData))
+      .then((res) => {
+        console.log("res", res);
+        if (res.payload.success) {
+        }
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="relative h-[300px] w-full overflow-hidden">
@@ -30,7 +77,7 @@ const ShoppingCheckout = () => {
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 p-5 gap-3">
-        <Address />
+        <Address setCurrentSelectedAddress={setCurrentSelectedAddress} />
         <div>
           <div className="flex flex-col gap-5 h-[60vh]">
             {cartItems?.items?.length > 0 ? (
@@ -55,7 +102,9 @@ const ShoppingCheckout = () => {
             </div>
           </div>
           <div className="mt-4 w-full">
-            <Button className="w-full">Place Order</Button>
+            <Button onClick={handlePlaceOrder} className="w-full">
+              Place Order
+            </Button>
           </div>
         </div>
       </div>

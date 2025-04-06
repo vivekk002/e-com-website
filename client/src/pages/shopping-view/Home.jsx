@@ -229,6 +229,7 @@ const ShoppingHome = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {categoriesWithIcons.map((item) => (
               <Card
+                key={item.id}
                 onClick={() => {
                   handleNavigateToListingPage(item, "category");
                 }}
@@ -251,6 +252,7 @@ const ShoppingHome = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {brandsWithImages.map((item) => (
               <Card
+                key={item.id}
                 onClick={() => {
                   handleNavigateToListingPage(item, "brand");
                 }}
@@ -280,6 +282,7 @@ const ShoppingHome = () => {
               ? productList.map((productItem) => {
                   return (
                     <ShoppingProductTile
+                      key={productItem._id}
                       handleGetProductDetails={handleGetProductDetails}
                       handleAddToCart={handleAddToCart}
                       product={productItem}
