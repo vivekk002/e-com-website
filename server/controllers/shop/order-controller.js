@@ -48,10 +48,11 @@ const createOrder = async (req, res) => {
 
     paypal.payment.create(create_payment_json, async (error, paymentInfo) => {
       if (error) {
-        console.log(error);
+        console.log("PayPal Error:", error);
         return res.status(500).json({
           success: false,
           message: "Error during creating paypal payment",
+          error: error.message,
         });
       } else {
         const newlyCreatedOrder = new order({
@@ -69,22 +70,23 @@ const createOrder = async (req, res) => {
         });
 
         await newlyCreatedOrder.save();
-        const approvalLink = paymentInfo.links.find(
+        const approvalURL = paymentInfo.links.find(
           (link) => link.rel === "approval_url"
         ).href;
 
         res.status(200).json({
           success: true,
           orderId: newlyCreatedOrder._id,
-          approvalLink,
+          approvalURL,
         });
       }
     });
   } catch (error) {
-    console.log(error);
+    console.log("Server Error:", error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
+      error: error.message,
     });
   }
 };

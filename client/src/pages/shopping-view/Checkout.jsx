@@ -11,6 +11,7 @@ const ShoppingCheckout = () => {
 
   const { cartItems } = useSelector((state) => state.shoppingCart);
   const { user } = useSelector((state) => state.auth);
+  const { approvalURL } = useSelector((state) => state.shoppingOrder);
 
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
   const [isPaymentStarted, setIsPaymentStarted] = useState(false);
@@ -60,12 +61,19 @@ const ShoppingCheckout = () => {
       .then((res) => {
         console.log("res", res);
         if (res.payload.success) {
+          setIsPaymentStarted(true);
+        } else {
+          setIsPaymentStarted(false);
         }
       })
       .catch((err) => {
         console.log("err", err);
       });
   };
+
+  if (approvalURL) {
+    window.location.href = approvalURL;
+  }
 
   return (
     <div className="flex flex-col gap-4">
