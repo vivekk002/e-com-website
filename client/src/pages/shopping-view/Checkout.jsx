@@ -32,6 +32,7 @@ const ShoppingCheckout = () => {
   const handlePlaceOrder = () => {
     const orderData = {
       userId: user.userId,
+      cartId: cartItems?._id,
       cartItems: cartItems.items.map((item) => ({
         productId: item?.productId,
         title: item?.title,
