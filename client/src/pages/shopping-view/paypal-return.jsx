@@ -1,159 +1,124 @@
-// import React, { useEffect, useState } from "react";
-// import { useLocation, useNavigate } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
-// import { updateOrderStatus } from "@/store/shop/order-slice";
-// import { Button } from "@/components/ui/button";
-// import { Loader2 } from "lucide-react";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { capturePayment } from "@/store/shop/order-slice";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
 
-const PaypalReturnPage = () => {
-  //   const location = useLocation();
-  //   const navigate = useNavigate();
-  //   const dispatch = useDispatch();
-  //   const [status, setStatus] = useState("processing"); // processing, success, error
-  //   const [errorMessage, setErrorMessage] = useState("");
-  //   const { user } = useSelector((state) => state.auth);
-  //   useEffect(() => {
-  //     const queryParams = new URLSearchParams(location.search);
-  //     const paymentId = queryParams.get("paymentId");
-  //     const payerId = queryParams.get("PayerID");
-  //     const token = queryParams.get("token");
-  //     if (!paymentId || !payerId || !token) {
-  //       setStatus("error");
-  //       setErrorMessage("Invalid payment return parameters");
-  //       return;
-  //     }
-  //     // Update order status with payment details
-  //     dispatch(
-  //       updateOrderStatus({
-  //         userId: user.userId,
-  //         paymentId,
-  //         payerId,
-  //         token,
-  //         paymentStatus: "completed",
-  //         orderStatus: "confirmed",
-  //       })
-  //     )
-  //       .then((response) => {
-  //         if (response.payload?.success) {
-  //           setStatus("success");
-  //         } else {
-  //           setStatus("error");
-  //           setErrorMessage("Failed to update order status");
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         setStatus("error");
-  //         setErrorMessage(error.message || "An error occurred");
-  //       });
-  //   }, [location, dispatch, user]);
-  //   const handleContinueShopping = () => {
-  //     navigate("/shop");
-  //   };
-  //   const handleViewOrders = () => {
-  //     navigate("/account/orders");
-  //   };
-  //   if (status === "processing") {
-  //     return (
-  //       <div className="min-h-screen flex items-center justify-center">
-  //         <div className="text-center">
-  //           <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" />
-  //           <h2 className="text-xl font-semibold mb-2">Processing Payment</h2>
-  //           <p className="text-gray-600">
-  //             Please wait while we confirm your payment...
-  //           </p>
-  //         </div>
-  //       </div>
-  //     );
-  //   }
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center bg-gray-50">
-  //       <div className="max-w-md w-full p-8 bg-white rounded-lg shadow-lg">
-  //         {status === "success" ? (
-  //           <>
-  //             <div className="text-center mb-8">
-  //               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-  //                 <svg
-  //                   className="w-8 h-8 text-green-500"
-  //                   fill="none"
-  //                   stroke="currentColor"
-  //                   viewBox="0 0 24 24"
-  //                 >
-  //                   <path
-  //                     strokeLinecap="round"
-  //                     strokeLinejoin="round"
-  //                     strokeWidth="2"
-  //                     d="M5 13l4 4L19 7"
-  //                   />
-  //                 </svg>
-  //               </div>
-  //               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-  //                 Payment Successful!
-  //               </h2>
-  //               <p className="text-gray-600">
-  //                 Thank you for your purchase. Your order has been confirmed.
-  //               </p>
-  //             </div>
-  //             <div className="space-y-4">
-  //               <Button
-  //                 onClick={handleViewOrders}
-  //                 className="w-full"
-  //                 variant="default"
-  //               >
-  //                 View Orders
-  //               </Button>
-  //               <Button
-  //                 onClick={handleContinueShopping}
-  //                 className="w-full"
-  //                 variant="outline"
-  //               >
-  //                 Continue Shopping
-  //               </Button>
-  //             </div>
-  //           </>
-  //         ) : (
-  //           <>
-  //             <div className="text-center mb-8">
-  //               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-  //                 <svg
-  //                   className="w-8 h-8 text-red-500"
-  //                   fill="none"
-  //                   stroke="currentColor"
-  //                   viewBox="0 0 24 24"
-  //                 >
-  //                   <path
-  //                     strokeLinecap="round"
-  //                     strokeLinejoin="round"
-  //                     strokeWidth="2"
-  //                     d="M6 18L18 6M6 6l12 12"
-  //                   />
-  //                 </svg>
-  //               </div>
-  //               <h2 className="text-2xl font-bold text-gray-900 mb-2">
-  //                 Payment Failed
-  //               </h2>
-  //               <p className="text-gray-600">{errorMessage}</p>
-  //             </div>
-  //             <div className="space-y-4">
-  //               <Button
-  //                 onClick={() => navigate("/checkout")}
-  //                 className="w-full"
-  //                 variant="default"
-  //               >
-  //                 Try Again
-  //               </Button>
-  //               <Button
-  //                 onClick={handleContinueShopping}
-  //                 className="w-full"
-  //                 variant="outline"
-  //               >
-  //                 Continue Shopping
-  //               </Button>
-  //             </div>
-  //           </>
-  //         )}
-  //       </div>
-  //     </div>
-  //   );
+const PaymentReturnPage = () => {
+  const dispatch = useDispatch();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [isProcessing, setIsProcessing] = useState(true);
+  const [error, setError] = useState(null);
+
+  const params = new URLSearchParams(location.search);
+  const paymentId = params.get("paymentId");
+  const payerId = params.get("PayerID");
+
+  useEffect(() => {
+    if (paymentId && payerId) {
+      const orderId = JSON.parse(sessionStorage.getItem("currentOrderId"));
+
+      if (!orderId) {
+        setError("Order information not found. Please try again.");
+        setIsProcessing(false);
+        return;
+      }
+
+      dispatch(capturePayment({ paymentId, payerId, orderId }))
+        .then((data) => {
+          if (data.payload.success) {
+            sessionStorage.removeItem("currentOrderId");
+            toast({
+              title: "Payment Successful",
+              description: "Your payment has been processed successfully.",
+              variant: "success",
+            });
+            navigate("/shop/payment-success");
+          } else {
+            setError(
+              data.payload.message ||
+                "Payment processing failed. Please try again."
+            );
+            setIsProcessing(false);
+          }
+        })
+        .catch((err) => {
+          console.error("Payment capture error:", err);
+          setError(
+            "An error occurred while processing your payment. Please contact support."
+          );
+          setIsProcessing(false);
+        });
+    } else {
+      setError("Payment information is missing. Please try again.");
+      setIsProcessing(false);
+    }
+  }, [dispatch, paymentId, payerId, navigate, toast]);
+
+  return (
+    <div className="container mx-auto py-10 flex justify-center items-center min-h-[70vh]">
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="text-center">
+          <div className="flex justify-center mb-4">
+            {isProcessing ? (
+              <div className="relative">
+                <Loader2 className="h-16 w-16 text-primary animate-spin" />
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="h-8 w-8 rounded-full bg-white"></div>
+                </div>
+              </div>
+            ) : (
+              <div className="h-16 w-16 rounded-full bg-red-100 flex items-center justify-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-8 w-8 text-red-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+              </div>
+            )}
+          </div>
+          <CardTitle className="text-2xl">
+            {isProcessing ? "Processing Payment" : "Payment Status"}
+          </CardTitle>
+          <CardDescription className="text-lg mt-2">
+            {isProcessing
+              ? "Please wait while we process your payment. This may take a moment."
+              : error
+              ? error
+              : "Your payment has been processed."}
+          </CardDescription>
+        </CardHeader>
+        {error && (
+          <div className="p-4 text-center">
+            <button
+              onClick={() => navigate("/shop/checkout")}
+              className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
+            >
+              Return to Checkout
+            </button>
+          </div>
+        )}
+      </Card>
+    </div>
+  );
 };
 
-export default PaypalReturnPage;
+export default PaymentReturnPage;
