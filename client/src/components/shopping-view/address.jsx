@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import CommonForm from "../common/form";
 import { addressFormControls } from "@/config";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +20,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "../ui/alert-dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../ui/dialog";
+import { Button } from "../ui/button";
+import { Plus } from "lucide-react";
 
 const initialAddressFormData = {
   address: "",
@@ -30,7 +39,7 @@ const initialAddressFormData = {
   notes: "",
 };
 
-const Address = ({ setCurrentSelectedAddress }) => {
+const Address = ({ setCurrentSelectedAddress, currentSelectedAddress }) => {
   const [formData, setFormData] = useState(initialAddressFormData);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
@@ -38,6 +47,7 @@ const Address = ({ setCurrentSelectedAddress }) => {
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const { toast } = useToast();
   const [addressToDelete, setAddressToDelete] = useState(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleManageAddress = async (event) => {
     event.preventDefault();
@@ -52,18 +62,21 @@ const Address = ({ setCurrentSelectedAddress }) => {
       return;
     }
 
-    if (currentEditedId !== null) {
-      dispatch(
-        updateAddress({
-          userId: user.userId,
-          addressId: currentEditedId,
-          formdata: formData,
-        })
-      ).then((data) => {
-        if (data.payload.success) {
+    try {
+      if (currentEditedId !== null) {
+        const response = await dispatch(
+          updateAddress({
+            userId: user.userId,
+            addressId: currentEditedId,
+            formdata: formData,
+          })
+        );
+
+        if (response.payload.success) {
           dispatch(fetchAddressList(user.userId));
           setFormData(initialAddressFormData);
           setCurrentEditedId(null);
+          setIsDialogOpen(false);
           toast({
             title: "Success",
             description: "Address updated successfully",
@@ -75,26 +88,33 @@ const Address = ({ setCurrentSelectedAddress }) => {
             variant: "destructive",
           });
         }
-      });
-    } else {
-      dispatch(addAddress({ ...formData, userId: user.userId })).then(
-        (data) => {
-          if (data.payload.success) {
-            dispatch(fetchAddressList(user.userId));
-            setFormData(initialAddressFormData);
-            toast({
-              title: "Success",
-              description: "Address added successfully",
-            });
-          } else {
-            toast({
-              title: "Error",
-              description: "Failed to add address",
-              variant: "destructive",
-            });
-          }
+      } else {
+        const response = await dispatch(
+          addAddress({ ...formData, userId: user.userId })
+        );
+
+        if (response.payload.success) {
+          dispatch(fetchAddressList(user.userId));
+          setFormData(initialAddressFormData);
+          setIsDialogOpen(false);
+          toast({
+            title: "Success",
+            description: "Address added successfully",
+          });
+        } else {
+          toast({
+            title: "Error",
+            description: "Failed to add address",
+            variant: "destructive",
+          });
         }
-      );
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An error occurred while saving the address",
+        variant: "destructive",
+      });
     }
   };
 
@@ -133,7 +153,6 @@ const Address = ({ setCurrentSelectedAddress }) => {
   const handleEdit = (getCurrAddress) => {
     setCurrentEditedId(getCurrAddress._id);
     setFormData({
-      ...formData,
       address: getCurrAddress?.address,
       city: getCurrAddress?.city,
       state: getCurrAddress?.state,
@@ -141,6 +160,13 @@ const Address = ({ setCurrentSelectedAddress }) => {
       phone: getCurrAddress?.phone,
       notes: getCurrAddress?.notes,
     });
+    setIsDialogOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    setCurrentEditedId(null);
+    setFormData(initialAddressFormData);
   };
 
   const isFormValid = () => {
@@ -155,35 +181,72 @@ const Address = ({ setCurrentSelectedAddress }) => {
 
   return (
     <Card>
-      <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2  gap-2">
-        {addressList && addressList.length > 0
-          ? addressList.map((singleAddress) => (
+      <div className="p-4">
+        <div className="flex justify-between items-center mb-4">
+          <h3 className="text-lg font-semibold">Your Addresses</h3>
+          <Button
+            onClick={() => setIsDialogOpen(true)}
+            className="flex items-center gap-2"
+            disabled={addressList.length >= 3}
+          >
+            <Plus className="h-4 w-4" />
+            Add New Address
+          </Button>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {addressList && addressList.length > 0 ? (
+            addressList.map((singleAddress) => (
               <AddressCard
                 key={singleAddress._id}
                 addressInfo={singleAddress}
                 handleDelete={handleDelete}
                 handleEdit={handleEdit}
                 setCurrentSelectedAddress={setCurrentSelectedAddress}
+                currentSelectedAddress={currentSelectedAddress}
               />
             ))
-          : null}
+          ) : (
+            <div className="col-span-2 text-center text-gray-500 py-4">
+              No addresses found. Add a new address to continue.
+            </div>
+          )}
+        </div>
       </div>
 
-      <CardHeader>
-        <CardTitle>
-          {currentEditedId !== null ? "Edit Address" : "Add New Address"}
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        <CommonForm
-          formControls={addressFormControls}
-          formData={formData}
-          setFormData={setFormData}
-          buttonText={currentEditedId !== null ? "Edit Address" : "Add Address"}
-          onSubmit={handleManageAddress}
-          isBtnDisabled={!isFormValid()}
-        />
-      </CardContent>
+      <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle>
+              {currentEditedId ? "Edit Address" : "Add New Address"}
+            </DialogTitle>
+          </DialogHeader>
+          <form onSubmit={handleManageAddress}>
+            <div className="space-y-4 py-4">
+              <CommonForm
+                formControls={addressFormControls}
+                formData={formData}
+                setFormData={setFormData}
+                buttonText=""
+                onSubmit={() => {}}
+                isBtnDisabled={!isFormValid()}
+                hideSubmitButton={true}
+              />
+            </div>
+            <DialogFooter>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={handleDialogClose}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={!isFormValid()}>
+                {currentEditedId ? "Update Address" : "Add Address"}
+              </Button>
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
 
       <AlertDialog
         open={!!addressToDelete}

@@ -23,6 +23,7 @@ const CommonForm = ({
   onSubmit,
   buttonText,
   isBtnDisabled,
+  hideSubmitButton = false,
 }) => {
   const renderInputByComponentType = (getControlItem) => {
     let element = null;
@@ -107,20 +108,24 @@ const CommonForm = ({
   };
 
   return (
-    <form onSubmit={onSubmit}>
-      <div className="flex flex-col gap-3">
-        {formControls.map((controlitem) => (
-          <div key={controlitem.name} className="grid w-full gap-1.5">
-            <Label className="mb-1 text-left">{controlitem.label}</Label>
-            {renderInputByComponentType(controlitem)}
-          </div>
-        ))}
-      </div>
-
-      <Button type="submit" className="mt-2 w-full" disabled={isBtnDisabled}>
-        {buttonText || "Submit"}
-      </Button>
-    </form>
+    <div className="space-y-4">
+      {formControls.map((controlItem) => (
+        <div key={controlItem.id} className="space-y-2">
+          <Label htmlFor={controlItem.id}>{controlItem.label}</Label>
+          {renderInputByComponentType(controlItem)}
+        </div>
+      ))}
+      {!hideSubmitButton && (
+        <Button
+          type="submit"
+          className="w-full"
+          onClick={onSubmit}
+          disabled={isBtnDisabled}
+        >
+          {buttonText}
+        </Button>
+      )}
+    </div>
   );
 };
 

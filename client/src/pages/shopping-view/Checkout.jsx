@@ -6,8 +6,10 @@ import UserCartItemsContent from "@/components/shopping-view/cart-items-content"
 import { Button } from "@/components/ui/button";
 import { createNewOrder } from "@/store/shop/order-slice";
 import { useDispatch } from "react-redux";
+import { useToast } from "@/hooks/use-toast";
 const ShoppingCheckout = () => {
   const dispatch = useDispatch();
+  const { toast } = useToast();
 
   const { cartItems } = useSelector((state) => state.shoppingCart);
   const { user } = useSelector((state) => state.auth);
@@ -30,6 +32,14 @@ const ShoppingCheckout = () => {
       : 0;
 
   const handlePlaceOrder = () => {
+    if (currentSelectedAddress === null) {
+      toast({
+        title: "Please select an address",
+        description: "Please select an address to place your order",
+        variant: "destructive",
+      });
+      return;
+    }
     const orderData = {
       userId: user.userId,
       cartId: cartItems?._id,
@@ -86,7 +96,20 @@ const ShoppingCheckout = () => {
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 mt-5 p-5 gap-3">
-        <Address setCurrentSelectedAddress={setCurrentSelectedAddress} />
+        <div>
+          <div className="mb-2 flex items-center">
+            <h2 className="text-xl font-semibold">Shipping Address</h2>
+            {currentSelectedAddress && (
+              <span className="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                Address Selected
+              </span>
+            )}
+          </div>
+          <Address
+            setCurrentSelectedAddress={setCurrentSelectedAddress}
+            currentSelectedAddress={currentSelectedAddress}
+          />
+        </div>
         <div>
           <div className="flex flex-col gap-5 h-[60vh]">
             {cartItems?.items?.length > 0 ? (
@@ -111,9 +134,27 @@ const ShoppingCheckout = () => {
             </div>
           </div>
           <div className="mt-4 w-full">
-            <Button onClick={handlePlaceOrder} className="w-full">
-              Place Order
+            <Button
+              onClick={handlePlaceOrder}
+              className="w-full"
+              disabled={!currentSelectedAddress || !cartItems?.items?.length}
+            >
+              {!cartItems?.items?.length
+                ? "Your Cart is Empty"
+                : currentSelectedAddress
+                ? "Place Order"
+                : "Select an Address to Place Order"}
             </Button>
+            {!currentSelectedAddress && cartItems?.items?.length > 0 && (
+              <p className="text-sm text-red-500 mt-2 text-center">
+                Please select a shipping address to continue
+              </p>
+            )}
+            {!cartItems?.items?.length && (
+              <p className="text-sm text-red-500 mt-2 text-center">
+                Please add items to your cart to place an order
+              </p>
+            )}
           </div>
         </div>
       </div>
