@@ -42,6 +42,8 @@ const AdminOrderDetails = ({ orderId }) => {
   const [orderStatus, setOrderStatus] = useState("");
   const [isUpdating, setIsUpdating] = useState(false);
 
+  console.log("currentOrder", currentOrder);
+
   useEffect(() => {
     // Set initial order status when current order changes
     if (currentOrder) {

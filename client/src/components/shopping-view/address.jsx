@@ -43,7 +43,10 @@ const Address = ({ setCurrentSelectedAddress, currentSelectedAddress }) => {
   const [formData, setFormData] = useState(initialAddressFormData);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { addressList, isLoading } = useSelector((state) => state.addressData);
+  const { addressList = [], isLoading } = useSelector(
+    (state) => state.addressData
+  );
+
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const { toast } = useToast();
   const [addressToDelete, setAddressToDelete] = useState(null);
@@ -176,8 +179,30 @@ const Address = ({ setCurrentSelectedAddress, currentSelectedAddress }) => {
   };
 
   useEffect(() => {
-    dispatch(fetchAddressList(user.userId));
-  }, [dispatch, user.userId]);
+    if (user?.userId) {
+      dispatch(fetchAddressList(user.userId));
+    }
+  }, [dispatch, user?.userId]);
+
+  if (!user?.userId) {
+    return (
+      <Card>
+        <div className="p-4 text-center text-gray-500">
+          Loading user data...
+        </div>
+      </Card>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <Card>
+        <div className="p-4 text-center text-gray-500">
+          Loading addresses...
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <Card>

@@ -54,6 +54,7 @@ const fetchAllAddress = async (req, res) => {
     }
 
     const addressList = await Address.find({ userId });
+
     return res.status(200).json({
       success: true,
       message: "Address fetched successfully",

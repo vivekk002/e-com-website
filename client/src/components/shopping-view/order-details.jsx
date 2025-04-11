@@ -224,7 +224,7 @@ const ShoppingOrderDetails = ({ orderId }) => {
                 {orderDetails.address?.pincode}
               </p>
               <p>Phone: {orderDetails.address?.phone}</p>
-              {orderDetails.address?.notes && (
+              {orderDetails.address?.note && (
                 <p className="text-sm text-gray-500">
                   Notes: {orderDetails.address?.notes}
                 </p>
@@ -233,7 +233,7 @@ const ShoppingOrderDetails = ({ orderId }) => {
           </div>
         </div>
       </div>
-      <style jsx global>{`
+      <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 6px;
         }

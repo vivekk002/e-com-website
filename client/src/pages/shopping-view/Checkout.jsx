@@ -16,6 +16,7 @@ const ShoppingCheckout = () => {
   const { approvalURL } = useSelector((state) => state.shoppingOrder);
 
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
+
   const [isPaymentStarted, setIsPaymentStarted] = useState(false);
 
   const totalCartAmount =

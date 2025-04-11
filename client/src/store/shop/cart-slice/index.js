@@ -8,13 +8,13 @@ const initialState = {
 
 export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
-  async (userId) => {
+  async (userId, { rejectWithValue }) => {
     try {
       if (!userId) {
-        return {
+        return rejectWithValue({
           success: false,
           message: "User ID is required",
-        };
+        });
       }
       const response = await axios.get(
         `http://localhost:5000/api/shop/cart/get/${userId}`
@@ -22,7 +22,10 @@ export const fetchCartItems = createAsyncThunk(
       return response.data;
     } catch (error) {
       console.log(error);
-      return error;
+      return rejectWithValue({
+        success: false,
+        message: error.response?.data?.message || "Failed to fetch cart items",
+      });
     }
   }
 );

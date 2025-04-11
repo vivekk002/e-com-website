@@ -17,9 +17,10 @@ const AuthLogIn = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    dispatch(logInUser(formData)).then((res) => {
+    try {
+      const res = await dispatch(logInUser(formData));
       if (res.payload?.success) {
         toast({
           title: "Login successful",
@@ -34,7 +35,13 @@ const AuthLogIn = () => {
           variant: "destructive",
         });
       }
-    });
+    } catch (error) {
+      toast({
+        title: "Login failed",
+        description: "An error occurred during login",
+        variant: "destructive",
+      });
+    }
   };
 
   return (

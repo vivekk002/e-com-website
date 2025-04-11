@@ -68,15 +68,18 @@ const fetchCartItems = async (req, res) => {
         message: "User ID is required",
       });
     }
-    const cart = await Cart.findOne({ userId }).populate({
+    let cart = await Cart.findOne({ userId }).populate({
       path: "items.productId",
       select: "title price image salePrice",
     });
+
     if (!cart) {
-      return res.status(404).json({
-        success: false,
-        message: "Cart not found",
+      // Create a new cart if one doesn't exist
+      cart = new Cart({
+        userId,
+        items: [],
       });
+      await cart.save();
     }
 
     const validCartItems = cart.items.filter(

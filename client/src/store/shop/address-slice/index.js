@@ -33,18 +33,15 @@ export const fetchAddressList = createAsyncThunk(
   async (userId) => {
     try {
       if (!userId) {
-        return {
-          success: false,
-          message: "User ID is required",
-        };
+        throw new Error("User ID is required");
       }
       const response = await axios.get(
         `http://localhost:5000/api/shop/address/get/${userId}`
       );
       return response.data;
     } catch (error) {
-      console.log(error);
-      return error;
+      console.error("Error fetching addresses:", error);
+      throw error;
     }
   }
 );
@@ -107,7 +104,7 @@ const addressSlice = createSlice({
       })
       .addCase(fetchAddressList.rejected, (state, action) => {
         state.isLoading = false;
-        state.addressList = [];
+        console.error("Failed to fetch addresses:", action.error);
       })
       .addCase(addAddress.pending, (state) => {
         state.isLoading = true;
