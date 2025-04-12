@@ -182,6 +182,11 @@ export const shoppingViewHeaderMenuItems = [
     label: "Sports & Outdoors",
     path: "/shop/listing",
   },
+  {
+    id: "search",
+    label: "Search",
+    path: "/shop/search",
+  },
 ];
 
 export const productFiltersOptions = {

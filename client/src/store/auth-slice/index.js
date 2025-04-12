@@ -30,8 +30,15 @@ export const logInUser = createAsyncThunk("auth/login", async (formData) => {
       withCredentials: true,
     }
   );
+
+  // Store the token in localStorage for API requests
+  if (response.data.success && response.data.token) {
+    localStorage.setItem("token", response.data.token);
+  }
+
   return response.data;
 });
+
 export const logOutUser = createAsyncThunk("auth/logout", async () => {
   const response = await axios.post(
     "http://localhost:5000/api/auth/logout",
@@ -40,6 +47,10 @@ export const logOutUser = createAsyncThunk("auth/logout", async () => {
       withCredentials: true,
     }
   );
+
+  // Clear the token from localStorage
+  localStorage.removeItem("token");
+
   return response.data;
 });
 

@@ -127,6 +127,7 @@ const ShoppingHome = () => {
 
   useEffect(() => {
     if (productDetails) {
+      console.log("Home: Product details fetched, opening dialog");
       setOpenDeatailsDialog(true);
     }
   }, [productDetails]);
@@ -152,8 +153,10 @@ const ShoppingHome = () => {
   };
 
   const handleGetProductDetails = (getCurrentProductId) => {
-    console.log("getCurrentProductId", getCurrentProductId);
-
+    console.log(
+      "Home: handleGetProductDetails called with ID:",
+      getCurrentProductId
+    );
     dispatch(fetchProductDetails(getCurrentProductId));
   };
 

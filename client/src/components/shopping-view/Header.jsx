@@ -25,7 +25,7 @@ const MenuItems = () => {
   const handleNavigate = (item) => {
     sessionStorage.removeItem("filters");
     const currentFilter =
-      item.id !== "home"
+      item.id !== "home" && item.id !== "search" && item.id !== "products"
         ? {
             category: [item.id],
           }

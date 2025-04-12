@@ -10,6 +10,7 @@ const shopCartRoutes = require("./routes/shop/cart-routes");
 const shopAddressRoutes = require("./routes/shop/address-route");
 const shopOrderRoutes = require("./routes/shop/order-routes");
 const shopSearchRoutes = require("./routes/shop/search-routes");
+const shopReviewRoutes = require("./routes/shop/review-routes");
 mongoose
   .connect(
     "mongodb+srv://vivekkumar054:vivek054@cluster0.30grw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
@@ -26,7 +27,11 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: ["http://localhost:5174", "http://localhost:5175"],
+    origin: [
+      "http://localhost:5174",
+      "http://localhost:5175",
+      "http://localhost:5173",
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
@@ -50,6 +55,7 @@ app.use("/api/shop/cart", shopCartRoutes);
 app.use("/api/shop/address", shopAddressRoutes);
 app.use("/api/shop/order", shopOrderRoutes);
 app.use("/api/shop/search", shopSearchRoutes);
+app.use("/api/shop/reviews", shopReviewRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

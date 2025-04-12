@@ -31,14 +31,22 @@ export const fetchCartItems = createAsyncThunk(
 );
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
-  async ({ userId, productId, quantity }) => {
-    const response = await axios.post(
-      `http://localhost:5000/api/shop/cart/add/${userId}/${productId}`,
-      {
-        quantity,
-      }
-    );
-    return response.data;
+  async ({ userId, productId, quantity }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/shop/cart/add/${userId}/${productId}`,
+        {
+          quantity,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue({
+        success: false,
+        message: error.response?.data?.message || "Failed to add item to cart",
+      });
+    }
   }
 );
 

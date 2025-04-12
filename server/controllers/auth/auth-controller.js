@@ -67,6 +67,7 @@ const logInUser = async (req, res) => {
     res.cookie("token", token, { httpOnly: true, secure: false }).json({
       success: true,
       message: "User logged in successfully",
+      token: token,
       user: {
         id: user._id,
         userId: user._id,
@@ -90,16 +91,33 @@ const logoutUser = async (req, res) => {
 
 //auth middleware
 const authMiddleware = async (req, res, next) => {
-  const token = req.cookies.token;
+  // Check for token in cookies
+  let token = req.cookies.token;
+
+  // If token not in cookies, check Authorization header
   if (!token) {
-    return res.status(401).json({ success: false, message: "Unauthorized" });
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+      token = authHeader.split(" ")[1];
+    }
   }
+
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorized - No authentication token found",
+    });
+  }
+
   try {
     const decoded = jwt.verify(token, "SECRET_KEY");
     req.user = decoded;
     next();
   } catch (error) {
-    res.status(401).json({ success: false, message: "Unauthorized" });
+    res.status(401).json({
+      success: false,
+      message: "Unauthorized - Invalid or expired token",
+    });
   }
 };
 
