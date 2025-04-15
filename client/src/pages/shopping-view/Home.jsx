@@ -55,6 +55,7 @@ import { useNavigate } from "react-router-dom";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { useToast } from "@/hooks/use-toast";
 import ProductDetailDialog from "@/components/shopping-view/product-details";
+import { fetchFeatureImage } from "@/store/common/features-slice";
 
 const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -67,7 +68,6 @@ const ShoppingHome = () => {
   const { toast } = useToast();
   const [openDeatailsDialog, setOpenDeatailsDialog] = useState(false);
 
-  const sliderImages = [banner1, banner2, banner3];
   const categoriesWithIcons = [
     { id: "Electronics", label: "Electronics", icon: Fan },
     { id: "Clothing", label: "Clothing", icon: Shirt },
@@ -107,14 +107,23 @@ const ShoppingHome = () => {
     { id: "The North Face", label: "The North Face", image: theNorthFaceLogo },
   ];
 
-  // Add auto-slide functionality
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
-    }, 3000); // Change slide every 3 seconds
+  const { featureImage, isLoading } = useSelector(
+    (state) => state.featureImages
+  );
 
-    return () => clearInterval(timer);
-  }, []);
+  useEffect(() => {
+    dispatch(fetchFeatureImage());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (featureImage && featureImage.length > 0) {
+      const timer = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % featureImage.length);
+      }, 3000);
+
+      return () => clearInterval(timer);
+    }
+  }, [featureImage]);
 
   useEffect(() => {
     dispatch(
@@ -127,7 +136,6 @@ const ShoppingHome = () => {
 
   useEffect(() => {
     if (productDetails) {
-      console.log("Home: Product details fetched, opening dialog");
       setOpenDeatailsDialog(true);
     }
   }, [productDetails]);
@@ -135,12 +143,12 @@ const ShoppingHome = () => {
   // Fix the prev/next functions
   const prevSlide = () => {
     setCurrentSlide((prev) =>
-      prev === 0 ? sliderImages.length - 1 : prev - 1
+      prev === 0 ? featureImage.length - 1 : prev - 1
     );
   };
 
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
+    setCurrentSlide((prev) => (prev + 1) % featureImage.length);
   };
 
   const handleNavigateToListingPage = (item, type) => {
@@ -153,10 +161,6 @@ const ShoppingHome = () => {
   };
 
   const handleGetProductDetails = (getCurrentProductId) => {
-    console.log(
-      "Home: handleGetProductDetails called with ID:",
-      getCurrentProductId
-    );
     dispatch(fetchProductDetails(getCurrentProductId));
   };
 
@@ -182,47 +186,44 @@ const ShoppingHome = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="relative w-full h-[900px] overflow-hidden">
-        {sliderImages.map((image, index) => (
-          <img
-            key={index}
-            src={image}
-            alt={`banner-${index + 1}`}
-            className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
-              index === currentSlide ? "opacity-100" : "opacity-0"
-            }`}
-          />
-        ))}
-
-        <Button
-          variant="outline"
-          size="icon"
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80 hover:bg-white/90 z-10"
-          onClick={prevSlide}
-        >
-          <ChevronLeftIcon className="w-4 h-4" />
-        </Button>
-
-        <Button
-          variant="outline"
-          size="icon"
-          className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80 hover:bg-white/90 z-10"
-          onClick={nextSlide}
-        >
-          <ChevronRightIcon className="w-4 h-4" />
-        </Button>
-
-        {/* Add slide indicators */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
-          {sliderImages.map((_, index) => (
-            <button
-              key={index}
-              className={`w-2 h-2 rounded-full transition-all ${
-                index === currentSlide ? "bg-white w-4" : "bg-white/50"
-              }`}
-              onClick={() => setCurrentSlide(index)}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="text-lg">Loading feature images...</div>
+          </div>
+        ) : featureImage && featureImage.length > 0 ? (
+          <>
+            {featureImage.map((image, index) => (
+              <img
+                key={index}
+                src={image.image}
+                alt={`banner-${index + 1}`}
+                className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
+                  index === currentSlide ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ))}
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80 hover:bg-white/90 z-10"
+              onClick={prevSlide}
+            >
+              <ChevronLeftIcon className="w-4 h-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80 hover:bg-white/90 z-10"
+              onClick={nextSlide}
+            >
+              <ChevronRightIcon className="w-4 h-4" />
+            </Button>
+          </>
+        ) : (
+          <div className="w-full h-full flex items-center justify-center">
+            <div className="text-lg">No feature images available</div>
+          </div>
+        )}
       </div>
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">

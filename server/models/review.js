@@ -7,6 +7,11 @@ const reviewSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    userName: {
+      ref: "User",
+      type: String,
+      required: true,
+    },
     product: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Product",

@@ -88,16 +88,19 @@ const AdminDashboard = () => {
         {isLoading ? (
           <div className="text-center py-4">Loading...</div>
         ) : featureImage && featureImage.length > 0 ? (
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-4 mt-4">
             {featureImage.map((image, index) => (
-              <div key={index} className="h-[90vh] ">
+              <div
+                key={index}
+                className="h-[200px] w-[200px] relative gap-4 p-5"
+              >
                 <img
                   src={image.image}
                   alt={`Feature Image ${index + 1}`}
                   className="object-cover w-full h-full mt-2"
                 />
                 <Button
-                  className="absolute p-4 mb-5 w-full"
+                  className="absolute p-4 mb-5 w-full mt-2"
                   variant="destructive"
                   onClick={() => handleImageDelete(image._id)}
                 >
