@@ -10,7 +10,7 @@ import { Routes, Route } from "react-router-dom";
 import ShoppingLayout from "./components/shopping-view/layout";
 import NotFound from "./pages/auth/not-fount";
 import ShoppingHome from "./pages/shopping-view/Home";
-import ShoppingListing from "./pages/shopping-view/listing";
+import ShoppingListing from "./pages/shopping-view/Listing";
 import ShoppingCheckout from "./pages/shopping-view/Checkout";
 import ShoppingAccount from "./pages/shopping-view/Account";
 import CheckAuth from "./components/common/CheckAuth";
