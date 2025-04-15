@@ -17,7 +17,7 @@ export const addAddress = createAsyncThunk(
         };
       }
       const response = await axios.post(
-        "http://localhost:5000/api/shop/address/add",
+        `${import.meta.env.VITE_API_URL}/api/shop/address/add`,
         addressData
       );
       return response.data;
@@ -36,7 +36,7 @@ export const fetchAddressList = createAsyncThunk(
         throw new Error("User ID is required");
       }
       const response = await axios.get(
-        `http://localhost:5000/api/shop/address/get/${userId}`
+        `${import.meta.env.VITE_API_URL}/api/shop/address/get/${userId}`
       );
       return response.data;
     } catch (error) {
@@ -57,7 +57,9 @@ export const updateAddress = createAsyncThunk(
         };
       }
       const response = await axios.put(
-        `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/shop/address/update/${userId}/${addressId}`,
         formdata
       );
       return response.data;
@@ -79,7 +81,9 @@ export const deleteAddress = createAsyncThunk(
         };
       }
       const response = await axios.delete(
-        `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`
+        `${
+          import.meta.env.VITE_API_URL
+        }/api/shop/address/delete/${userId}/${addressId}`
       );
       return response.data;
     } catch (error) {

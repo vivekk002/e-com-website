@@ -6,7 +6,7 @@ export const searchProducts = createAsyncThunk(
   async (searchQuery, { rejectWithValue }) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/shop/search/${encodeURIComponent(
+        `${import.meta.env.VITE_API_URL}/api/shop/search/${encodeURIComponent(
           searchQuery
         )}`
       );

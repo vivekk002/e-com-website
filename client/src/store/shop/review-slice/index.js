@@ -10,7 +10,7 @@ export const fetchAllReviews = createAsyncThunk(
   "products/fetchAllReviews",
   async (productId) => {
     const result = await axios.get(
-      `http://localhost:5000/api/shop/reviews/get/${productId}`
+      `${import.meta.env.VITE_API_URL}/api/shop/reviews/get/${productId}`
     );
     return result.data;
   }
@@ -22,7 +22,7 @@ export const addReview = createAsyncThunk(
     const token = localStorage.getItem("token");
 
     const result = await axios.post(
-      `http://localhost:5000/api/shop/reviews/add/${productId}`,
+      `${import.meta.env.VITE_API_URL}/api/shop/reviews/add/${productId}`,
       {
         userId,
         productId,
@@ -46,7 +46,7 @@ export const deleteReview = createAsyncThunk(
     const token = localStorage.getItem("token");
 
     const result = await axios.delete(
-      `http://localhost:5000/api/shop/reviews/delete/${reviewId}`,
+      `${import.meta.env.VITE_API_URL}/api/shop/reviews/delete/${reviewId}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

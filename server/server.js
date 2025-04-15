@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
@@ -15,14 +16,11 @@ const featureRoutes = require("./routes/common/feature-routes");
 
 // MongoDB connection with additional options
 mongoose
-  .connect(
-    "mongodb+srv://vivekkumar054:vivek054@cluster0.30grw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-    {
-      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-      socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
-      family: 4, // Use IPv4, skip trying IPv6
-    }
-  )
+  .connect(process.env.MONGO_URL, {
+    serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+    socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+    family: 4, // Use IPv4, skip trying IPv6
+  })
   .then(() => {
     console.log("Connected to MongoDB");
   })
@@ -31,15 +29,11 @@ mongoose
   });
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT;
 
 app.use(
   cors({
-    origin: [
-      "http://localhost:5174",
-      "http://localhost:5175",
-      "http://localhost:5173",
-    ],
+    origin: [process.env.CORS_ORIGINS],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
