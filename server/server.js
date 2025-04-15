@@ -11,6 +11,7 @@ const shopAddressRoutes = require("./routes/shop/address-route");
 const shopOrderRoutes = require("./routes/shop/order-routes");
 const shopSearchRoutes = require("./routes/shop/search-routes");
 const shopReviewRoutes = require("./routes/shop/review-routes");
+const featureRoutes = require("./routes/common/feature-routes");
 mongoose
   .connect(
     "mongodb+srv://vivekkumar054:vivek054@cluster0.30grw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
@@ -56,6 +57,7 @@ app.use("/api/shop/address", shopAddressRoutes);
 app.use("/api/shop/order", shopOrderRoutes);
 app.use("/api/shop/search", shopSearchRoutes);
 app.use("/api/shop/reviews", shopReviewRoutes);
+app.use("/api/common/feature", featureRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
