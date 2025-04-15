@@ -23,17 +23,14 @@ import PaypalReturnPage from "./pages/shopping-view/paypal-return";
 import PaymentSuccessPage from "./pages/shopping-view/payment-success";
 import SearchProducts from "./pages/shopping-view/Search";
 function App() {
-  const { isAuthenticated, user, isLoading } = useSelector(
-    (state) => state.auth
-  );
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(checkAuth());
+    const token = JSON.parse(sessionStorage.getItem("token"));
+    if (token) {
+      dispatch(checkAuth(token));
+    }
   }, [dispatch]);
-
-  if (isLoading) {
-    return <Skeleton className="w-[700px] h-[600px] bg-black rounded" />;
-  }
 
   return (
     <div className="flex flex-col overflow-hidden bg-white w-screen min-h-screen">

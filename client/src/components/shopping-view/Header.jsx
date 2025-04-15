@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem,
 } from "../ui/dropdown-menu";
-import { logOutUser } from "@/store/auth-slice";
+import { resetTokenAndCredentials } from "@/store/auth-slice";
 import UserCartWrapper from "./cart-wrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "../ui/label";
@@ -57,8 +57,12 @@ const HeaderRightContent = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const handleLogout = () => {
-    dispatch(logOutUser());
+    //
+    dispatch(resetTokenAndCredentials());
+    sessionStorage.clear();
+    navigate("/auth/login");
   };
   useEffect(() => {
     if (user?.userId) {

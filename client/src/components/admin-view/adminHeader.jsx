@@ -1,12 +1,17 @@
 import { AlignJustify, LogOut } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
-import { logOutUser } from "@/store/auth-slice";
+import { resetTokenAndCredentials } from "@/store/auth-slice";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 const AdminHeader = ({ setOpen }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleLogout = () => {
-    dispatch(logOutUser());
+    // dispatch(logOutUser());
+    dispatch(resetTokenAndCredentials());
+    sessionStorage.clear();
+    navigate("/auth/login");
   };
 
   return (

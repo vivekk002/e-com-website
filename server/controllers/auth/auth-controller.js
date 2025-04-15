@@ -61,10 +61,22 @@ const logInUser = async (req, res) => {
       "SECRET_KEY",
       { expiresIn: "1h" }
     );
-    res.cookie("token", token, { httpOnly: true, secure: true }).json({
+    // res.cookie("token", token, { httpOnly: true, secure: true }).json({
+    //   success: true,
+    //   message: "User logged in successfully",
+    //   token: token,
+    //   user: {
+    //     id: user._id,
+    //     userId: user._id,
+    //     email: user.email,
+    //     role: user.role,
+    //     userName: user.username,
+    //   },
+    // });
+    res.status(200).json({
       success: true,
       message: "User logged in successfully",
-      token: token,
+      token,
       user: {
         id: user._id,
         userId: user._id,
@@ -87,20 +99,43 @@ const logoutUser = async (req, res) => {
 };
 
 //auth middleware
-const authMiddleware = async (req, res, next) => {
-  let token = req.cookies.token;
+// const authMiddleware = async (req, res, next) => {
+//   let token = req.cookies.token;
 
-  if (!token) {
-    const authHeader = req.headers.authorization;
-    if (authHeader && authHeader.startsWith("Bearer ")) {
-      token = authHeader.split(" ")[1];
-    }
-  }
+//   if (!token) {
+//     const authHeader = req.headers.authorization;
+//     if (authHeader && authHeader.startsWith("Bearer ")) {
+//       token = authHeader.split(" ")[1];
+//     }
+//   }
+
+//   if (!token) {
+//     return res.status(401).json({
+//       success: false,
+//       message: "Unauthorized - No authentication token found",
+//     });
+//   }
+
+//   try {
+//     const decoded = jwt.verify(token, "SECRET_KEY");
+//     req.user = decoded;
+//     next();
+//   } catch (error) {
+//     res.status(401).json({
+//       success: false,
+//       message: "Unauthorized - Invalid or expired token",
+//     });
+//   }
+// };
+
+const authMiddleware = async (req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
     return res.status(401).json({
       success: false,
-      message: "Unauthorized - No authentication token found",
+      message: "Unauthorized User - No authentication token found",
     });
   }
 
