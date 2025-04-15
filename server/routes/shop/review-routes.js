@@ -7,8 +7,8 @@ const {
 } = require("../../controllers/shop/review-controller");
 const { authMiddleware } = require("../../controllers/auth/auth-controller");
 
-router.get("/product/:productId", getProductReviews);
-router.post("/product/:productId", authMiddleware, addReview);
-router.delete("/:reviewId", authMiddleware, deleteReview);
+router.get("/get/:productId", getProductReviews);
+router.post("/add/:productId", authMiddleware, addReview);
+router.delete("/delete/:reviewId", authMiddleware, deleteReview);
 
 module.exports = router;

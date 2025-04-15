@@ -80,8 +80,14 @@ const HeaderRightContent = () => {
           }}
           variant="outline"
           size="icon"
+          className="relative"
         >
           <ShoppingCart className="h-6 w-6" />
+          <span className="absolute -top-0.5 right-1.45 h-5 w-5 flex items-center justify-center text-sm">
+            {cartItems && cartItems.items && cartItems.items.length > 0
+              ? cartItems.items.length
+              : 0}
+          </span>
           <span className="sr-only">User Cart</span>
         </Button>
         <UserCartWrapper

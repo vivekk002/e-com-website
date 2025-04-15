@@ -10,7 +10,7 @@ export const fetchAllReviews = createAsyncThunk(
   "products/fetchAllReviews",
   async (productId) => {
     const result = await axios.get(
-      `http://localhost:5000/api/shop/reviews/product/${productId}`
+      `http://localhost:5000/api/shop/reviews/get/${productId}`
     );
     return result.data;
   }
@@ -19,12 +19,10 @@ export const fetchAllReviews = createAsyncThunk(
 export const addReview = createAsyncThunk(
   "products/addReview",
   async ({ userId, productId, reviewData }) => {
-    // Get the token from localStorage
     const token = localStorage.getItem("token");
 
-    // Include the token in the Authorization header
     const result = await axios.post(
-      `http://localhost:5000/api/shop/reviews/product/${productId}`,
+      `http://localhost:5000/api/shop/reviews/add/${productId}`,
       {
         userId,
         productId,
@@ -37,7 +35,6 @@ export const addReview = createAsyncThunk(
         },
       }
     );
-    console.log("result", result);
     return result.data;
   }
 );
@@ -45,10 +42,9 @@ export const addReview = createAsyncThunk(
 export const deleteReview = createAsyncThunk(
   "products/deleteReview",
   async ({ reviewId }) => {
-    // Get the token from localStorage
+    console.log("reviewId", reviewId);
     const token = localStorage.getItem("token");
 
-    // Include the token in the Authorization header
     const result = await axios.delete(
       `http://localhost:5000/api/shop/reviews/delete/${reviewId}`,
       {

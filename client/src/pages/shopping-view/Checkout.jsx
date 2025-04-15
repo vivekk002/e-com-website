@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button";
 import { createNewOrder } from "@/store/shop/order-slice";
 import { useDispatch } from "react-redux";
 import { useToast } from "@/hooks/use-toast";
+import { Loader2 } from "lucide-react";
+
 const ShoppingCheckout = () => {
   const dispatch = useDispatch();
   const { toast } = useToast();
 
   const { cartItems } = useSelector((state) => state.shoppingCart);
   const { user } = useSelector((state) => state.auth);
-  const { approvalURL } = useSelector((state) => state.shoppingOrder);
+  const { approvalURL, isLoding } = useSelector((state) => state.shoppingOrder);
 
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
 
@@ -138,13 +140,22 @@ const ShoppingCheckout = () => {
             <Button
               onClick={handlePlaceOrder}
               className="w-full"
-              disabled={!currentSelectedAddress || !cartItems?.items?.length}
+              disabled={
+                !currentSelectedAddress || !cartItems?.items?.length || isLoding
+              }
             >
-              {!cartItems?.items?.length
-                ? "Your Cart is Empty"
-                : currentSelectedAddress
-                ? "Place Order"
-                : "Select an Address to Place Order"}
+              {isLoding ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Processing Order...
+                </>
+              ) : !cartItems?.items?.length ? (
+                "Your Cart is Empty"
+              ) : currentSelectedAddress ? (
+                "Place Order"
+              ) : (
+                "Select an Address to Place Order"
+              )}
             </Button>
             {!currentSelectedAddress && cartItems?.items?.length > 0 && (
               <p className="text-sm text-red-500 mt-2 text-center">

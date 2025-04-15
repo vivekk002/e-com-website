@@ -3,7 +3,6 @@ const Product = require("../../models/product");
 const User = require("../../models/user");
 const Order = require("../../models/Order");
 
-// Add a new review
 const addReview = async (req, res) => {
   try {
     const { productId, userId, rating, comment } = req.body;
@@ -16,7 +15,6 @@ const addReview = async (req, res) => {
       });
     }
 
-    // Check if product exists
     const productPurchased = await Order.findOne({
       userId: userId,
       "cartItems.productId": productId,
@@ -28,7 +26,6 @@ const addReview = async (req, res) => {
       });
     }
 
-    // Check if user has already reviewed this product
     const existingReview = await Review.findOne({
       user: userId,
       product: productId,
@@ -40,7 +37,6 @@ const addReview = async (req, res) => {
       });
     }
 
-    // Create new review
     const review = await Review.create({
       user: userId,
       userName: user.username || user.name || "Anonymous",
@@ -49,7 +45,6 @@ const addReview = async (req, res) => {
       comment,
     });
 
-    // Update product's average rating
     const reviews = await Review.find({ product: productId });
     const avgRating =
       reviews.reduce((acc, item) => acc + item.rating, 0) / reviews.length;
@@ -71,7 +66,6 @@ const addReview = async (req, res) => {
   }
 };
 
-// Get all reviews for a product
 const getProductReviews = async (req, res) => {
   try {
     const { productId } = req.params;
@@ -91,9 +85,6 @@ const getProductReviews = async (req, res) => {
 
     const count = await Review.countDocuments({ product: productId });
 
-    console.log("reviews", reviews);
-    console.log("count", count);
-
     res.status(200).json({
       success: true,
       data: reviews,
@@ -108,12 +99,10 @@ const getProductReviews = async (req, res) => {
   }
 };
 
-// Delete a review
 const deleteReview = async (req, res) => {
   try {
     const { reviewId } = req.params;
 
-    // Check if user is authenticated
     if (!req.user || !req.user.userId) {
       return res.status(401).json({
         success: false,
@@ -134,7 +123,6 @@ const deleteReview = async (req, res) => {
     const productId = review.product;
     await review.deleteOne();
 
-    // Update product's average rating
     const reviews = await Review.find({ product: productId });
     const avgRating =
       reviews.length > 0

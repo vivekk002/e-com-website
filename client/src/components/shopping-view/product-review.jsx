@@ -67,25 +67,23 @@ const ProductReview = ({ productId, productTitle, onReviewAdded }) => {
         },
       })
     ).then((result) => {
-      if (result.type === "reviews/addReview/fulfilled") {
+      if (result.payload.success) {
         setReviewText("");
         setRating(5);
+        dispatch(fetchAllReviews(productId));
         toast({
           title: "Review Added",
           description: "Your review has been added successfully",
           variant: "success",
         });
-        // Refresh reviews after adding
-        dispatch(fetchAllReviews(productId));
-        // Notify parent component
         if (onReviewAdded) {
           onReviewAdded();
         }
-      } else if (result.error) {
+      } else if (result.payload.success === false) {
         toast({
           title: "Error Adding Review",
           description:
-            result.error.message || "Failed to add review. Please try again.",
+            result.payload.message || "Failed to add review. Please try again.",
           variant: "destructive",
         });
       }
@@ -93,23 +91,21 @@ const ProductReview = ({ productId, productTitle, onReviewAdded }) => {
   };
 
   const handleDeleteReview = (reviewId) => {
-    dispatch(deleteReview(reviewId)).then((result) => {
-      if (result.type === "reviews/deleteReview/fulfilled") {
+    dispatch(deleteReview({ reviewId })).then((result) => {
+      if (result.payload.success) {
+        dispatch(fetchAllReviews(productId));
         toast({
           title: "Review deleted",
           description: "Your review has been deleted successfully",
           variant: "success",
         });
-        // Refresh reviews after deleting
-        dispatch(fetchAllReviews(productId));
-        // Notify parent component
         if (onReviewAdded) {
           onReviewAdded();
         }
-      } else if (result.error) {
+      } else if (result.payload.success === false) {
         toast({
           title: "Error",
-          description: result.error.message || "Failed to delete review",
+          description: result.payload.message || "Failed to delete review",
           variant: "destructive",
         });
       }

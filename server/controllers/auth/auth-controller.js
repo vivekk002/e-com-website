@@ -7,8 +7,6 @@ const registerUser = async (req, res) => {
   console.log(req.body);
   const { username, email, password } = req.body;
 
-  console.log("this is email", email);
-
   try {
     const existingUser = await User.findOne({ email });
 
@@ -25,7 +23,6 @@ const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
     });
-    console.log("this is new user", newUser);
 
     await newUser.save();
 
@@ -91,10 +88,8 @@ const logoutUser = async (req, res) => {
 
 //auth middleware
 const authMiddleware = async (req, res, next) => {
-  // Check for token in cookies
   let token = req.cookies.token;
 
-  // If token not in cookies, check Authorization header
   if (!token) {
     const authHeader = req.headers.authorization;
     if (authHeader && authHeader.startsWith("Bearer ")) {

@@ -12,15 +12,22 @@ const shopOrderRoutes = require("./routes/shop/order-routes");
 const shopSearchRoutes = require("./routes/shop/search-routes");
 const shopReviewRoutes = require("./routes/shop/review-routes");
 const featureRoutes = require("./routes/common/feature-routes");
+
+// MongoDB connection with additional options
 mongoose
   .connect(
-    "mongodb+srv://vivekkumar054:vivek054@cluster0.30grw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+    "mongodb+srv://vivekkumar054:vivek054@cluster0.30grw.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+    {
+      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+      family: 4, // Use IPv4, skip trying IPv6
+    }
   )
   .then(() => {
     console.log("Connected to MongoDB");
   })
   .catch((err) => {
-    console.log(err);
+    console.error("MongoDB connection error:", err);
   });
 
 const app = express();

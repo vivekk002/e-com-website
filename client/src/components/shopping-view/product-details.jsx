@@ -103,8 +103,6 @@ const ProductDetailDialog = ({ open, setOpen, productDetails }) => {
     );
   }
 
-  console.log("productDetails", productDetails);
-
   return (
     <Dialog open={open} onOpenChange={setOpen} onClose={handleDialogClose}>
       <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] max-h-[90vh] overflow-auto">
@@ -153,6 +151,9 @@ const ProductDetailDialog = ({ open, setOpen, productDetails }) => {
             </div>
             <span className="text-sm text-muted-foreground">
               {(productDetails.averageRating || 0).toFixed(1)}
+              <span className="text-sm text-muted-foreground ml-1">
+                ({productDetails.reviewsCount || 0})
+              </span>
             </span>
           </div>
           <div className="flex items-center gap-3 mb-3 mt-5">
