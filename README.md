@@ -36,7 +36,9 @@ A full-featured e-commerce platform built with the MERN stack, including user au
 ---
 
 ## 📷 Screenshots
-*(Add screenshots of homepage, product page, cart, and dashboard here)*
+[*(Add screenshots of homepage, product page, cart, and dashboard here)*](https://e-com-website-1-zahm.onrender.com/auth/login)
+![image](https://github.com/user-attachments/assets/9491283f-b9e7-472a-bbac-70daa237199c)
+
 
 ---
 
